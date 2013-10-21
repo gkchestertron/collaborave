@@ -11,7 +11,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131021010756) do
+ActiveRecord::Schema.define(version: 20131021154804) do
+
+  create_table "collabs", force: true do |t|
+    t.integer  "project_id"
+    t.integer  "collaborator_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "collabs", ["collaborator_id"], name: "index_collabs_on_collaborator_id"
+  add_index "collabs", ["project_id", "collaborator_id"], name: "index_collabs_on_project_id_and_collaborator_id", unique: true
+  add_index "collabs", ["project_id"], name: "index_collabs_on_project_id"
+
+  create_table "projects", force: true do |t|
+    t.string   "files"
+    t.integer  "author_id"
+    t.string   "settings"
+    t.string   "collaborator_ids"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", force: true do |t|
     t.string   "name"
@@ -25,5 +45,15 @@ ActiveRecord::Schema.define(version: 20131021010756) do
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
   add_index "users", ["remember_token"], name: "index_users_on_remember_token"
+
+  create_table "versions", force: true do |t|
+    t.string   "settings"
+    t.integer  "project_id"
+    t.integer  "collaborator_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "versions", ["project_id"], name: "index_versions_on_project_id"
 
 end
