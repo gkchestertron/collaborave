@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131021154804) do
+ActiveRecord::Schema.define(version: 20131022211846) do
 
   create_table "collabs", force: true do |t|
     t.integer  "project_id"
@@ -25,10 +25,18 @@ ActiveRecord::Schema.define(version: 20131021154804) do
   add_index "collabs", ["project_id"], name: "index_collabs_on_project_id"
 
   create_table "projects", force: true do |t|
-    t.string   "files"
     t.integer  "author_id"
-    t.string   "settings"
-    t.string   "collaborator_ids"
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "projects", ["author_id", "created_at"], name: "index_projects_on_author_id_and_created_at"
+
+  create_table "tracks", force: true do |t|
+    t.string   "track_name"
+    t.integer  "project_id"
+    t.string   "path"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -46,14 +54,28 @@ ActiveRecord::Schema.define(version: 20131021154804) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true
   add_index "users", ["remember_token"], name: "index_users_on_remember_token"
 
-  create_table "versions", force: true do |t|
-    t.string   "settings"
-    t.integer  "project_id"
-    t.integer  "collaborator_id"
+  create_table "version_files", force: true do |t|
+    t.integer  "version_id"
+    t.integer  "track_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "versions", ["project_id"], name: "index_versions_on_project_id"
+  add_index "version_files", ["track_id"], name: "index_version_files_on_track_id"
+  add_index "version_files", ["version_id", "track_id"], name: "index_version_files_on_version_id_and_track_id", unique: true
+  add_index "version_files", ["version_id"], name: "index_version_files_on_version_id"
+
+  create_table "versions", force: true do |t|
+    t.string   "settings"
+    t.integer  "project_id"
+    t.integer  "collaborator_id"
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "versions", ["collaborator_id", "created_at"], name: "index_versions_on_collaborator_id_and_created_at"
+  add_index "versions", ["collaborator_id", "project_id"], name: "index_versions_on_collaborator_id_and_project_id", unique: true
+  add_index "versions", ["project_id", "created_at"], name: "index_versions_on_project_id_and_created_at"
 
 end

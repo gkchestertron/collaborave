@@ -1,11 +1,25 @@
-<div class="center hero-unit">
-	<h1>Welcome to Collaborave</h1>
+<% if signed_in? %>
+  <div class="row">
+    <aside class="span4">
+      <section>
+        <%= render 'shared/user_info' %>
+      </section>
+      <section>
+        <%= render 'shared/project_form' %>
+      </section>
+    </aside>
+  </div>
+<% else %>
+  <div class="center hero-unit">
+    <h1>Welcome to Collaborave!</h1>
 
-	<h2>
-		This is the homepage for <a href="http://Collaborave.com/">Collaborave.com</a>
-	</h2>
+    <h2>
+      This is the homepage of awesome.
+    </h2>
 
-	<%= link_to "Sign up now!", signup_path, class: "btn btn-large btn-primary" %>
-</div>
+    <%= link_to "Sign up now!", signup_path,
+                                class: "btn btn-large btn-primary" %>
+  </div>
 
-<%= link_to image_tag("rails.png", alt: "Rails"), 'http://rubyonrails.org/' %>	
+  <%= link_to image_tag("rails.png", alt: "Rails"), 'http://rubyonrails.org/' %>
+<% end %>

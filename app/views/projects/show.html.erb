@@ -1,0 +1,24 @@
+<% provide(:title, @project.name) %>
+<div class="row">
+  <aside class="span4">
+    <section>
+      <h1>
+        <%= gravatar_for @user %>
+        <%= @project.name %>
+      </h1>
+    </section>
+    <div>
+        <span>Upload a Track</span>
+        
+      </div>  
+  </aside>
+  <div class="span8">
+    <% if @project.versions.any? %>
+      <h3>Versions (<%= @project.versions.count %>)</h3>
+      <ol class="microposts">
+        <%= render @versions %>
+      </ol>
+      <%= will_paginate @versions %>
+    <% end %>
+  </div>
+</div>
