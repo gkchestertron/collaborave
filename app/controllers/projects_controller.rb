@@ -15,10 +15,13 @@ class ProjectsController < ApplicationController
 	end
 
 	def show
-		@user = User.find(params[:id])
+		
+		@user = current_user
     	@projects = @user.projects.paginate(page: params[:page])
     	@project = Project.find(params[:id])
     	@versions = @project.versions.paginate(page: params[:page])
+    	@track = @project.tracks.new
+    	@tracks = @project.tracks.all
   	end
 
 

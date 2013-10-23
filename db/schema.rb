@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131022211846) do
+ActiveRecord::Schema.define(version: 20131023155304) do
 
   create_table "collabs", force: true do |t|
     t.integer  "project_id"
@@ -23,6 +23,28 @@ ActiveRecord::Schema.define(version: 20131022211846) do
   add_index "collabs", ["collaborator_id"], name: "index_collabs_on_collaborator_id"
   add_index "collabs", ["project_id", "collaborator_id"], name: "index_collabs_on_project_id_and_collaborator_id", unique: true
   add_index "collabs", ["project_id"], name: "index_collabs_on_project_id"
+
+  create_table "project_files", force: true do |t|
+    t.integer  "project_id"
+    t.integer  "track_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "project_files", ["project_id", "track_id"], name: "index_project_files_on_project_id_and_track_id", unique: true
+  add_index "project_files", ["project_id"], name: "index_project_files_on_project_id"
+  add_index "project_files", ["track_id"], name: "index_project_files_on_track_id"
+
+  create_table "project_tracks", force: true do |t|
+    t.integer  "project_id"
+    t.integer  "track_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "project_tracks", ["project_id", "track_id"], name: "index_project_tracks_on_project_id_and_track_id", unique: true
+  add_index "project_tracks", ["project_id"], name: "index_project_tracks_on_project_id"
+  add_index "project_tracks", ["track_id"], name: "index_project_tracks_on_track_id"
 
   create_table "projects", force: true do |t|
     t.integer  "author_id"
@@ -59,6 +81,7 @@ ActiveRecord::Schema.define(version: 20131022211846) do
     t.integer  "track_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "project_id"
   end
 
   add_index "version_files", ["track_id"], name: "index_version_files_on_track_id"

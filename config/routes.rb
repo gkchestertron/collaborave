@@ -1,4 +1,10 @@
 Collaborave::Application.routes.draw do
+  resources :tracks, only: [:index, :new, :create, :destroy]
+
+  get "tracks/index"
+  get "tracks/new"
+  get "tracks/create"
+  get "tracks/destroy"
   resources :users
   resources :sessions, only: [:new, :create, :destroy]
   resources :projects

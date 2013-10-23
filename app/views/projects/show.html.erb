@@ -6,12 +6,25 @@
         <%= gravatar_for @user %>
         <%= @project.name %>
       </h1>
-    </section>
-    <div>
-        <span>Upload a Track</span>
-        
-      </div>  
+    </section> 
   </aside>
+
+  <section>
+    <div>
+      <span>Upload a Track</span> 
+    </div> 
+    <%= render 'tracks/trackform' %>
+  </section>
+  
+  <div class="span8">
+    <% if @project.tracks.any? %>
+      <h3>Tracks (<%= @project.tracks.count %>)</h3>
+      <ol class="microposts">
+        <%= render @tracks %>
+      </ol>
+      <%= will_paginate @versions %>
+    <% end %>
+  </div>
   <div class="span8">
     <% if @project.versions.any? %>
       <h3>Versions (<%= @project.versions.count %>)</h3>
