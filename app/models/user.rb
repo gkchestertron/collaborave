@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
   has_many :projects, foreign_key: "author_id", dependent: :destroy
   has_many :collabs, foreign_key: "collaborator_id", dependent: :destroy
   has_many :reverse_collabs, foreign_key: "collaborator_id", class_name: "Collab", dependent: :destroy
-  has_many :collab_projects, through: :reverse_collabs, source: :project
+  has_many :collab_projects, through: :reverse_collabs, source: :project, dependent: :destroy
   has_many :versions, foreign_key: "collaborator_id", dependent: :destroy
   before_save { self.email = email.downcase }
   before_create :create_remember_token

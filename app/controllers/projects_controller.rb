@@ -16,12 +16,17 @@ class ProjectsController < ApplicationController
 
 	def show
 		
-		@user = current_user
-    	@projects = @user.projects.paginate(page: params[:page])
+		
     	@project = Project.find(params[:id])
+    	@user = @project.author
+    	@version = Version.new
+    	
     	@versions = @project.versions.paginate(page: params[:page])
     	@track = @project.tracks.new
+    	@track.project_id = @project.id
     	@tracks = @project.tracks.all
+    	@track_urls = []
+    	@tracks.each {|track| @track_urls << track.path.url if track.path.url != nil}
   	end
 
 

@@ -1,5 +1,6 @@
 Collaborave::Application.routes.draw do
   resources :tracks, only: [:index, :new, :create, :destroy]
+  resources :versions
 
   get "tracks/index"
   get "tracks/new"

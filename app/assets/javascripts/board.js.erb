@@ -1,0 +1,738 @@
+
+//get project name
+var project = $("#project_heading").contents().text()
+
+//get list of files from project
+console.log(source_array);
+
+
+//filter value arrays
+var low_shelf = [];
+var high_shelf = [];
+var peaking = [];
+var panner = [];
+var volume = [];
+var trackMeter = [];
+var master = 1; 
+
+//setup global variables
+var trackBuffers = new Array();
+var bufferCount = 0;
+var playing = false;
+var soloing = false;
+var offset = 0;
+var transport = 0;
+var trackList = source_array;
+var duration;
+var source = new Array();
+var muted = [];
+var solos = [];
+var settings =[];
+var goodHash = false;
+//declare context variables for canvases
+var ctx = [];
+var ctxm, ctxa;
+var ctxt = $("#timeSlider").get()[0].getContext("2d");
+
+
+function loadHash(){
+  if ( window.location.hash ){
+    
+    try {
+      settings = JSON.parse(window.location.hash.substr(1));
+      goodHash=true;
+    }
+    catch (err){
+      window.location.hash = 'Oops';
+    }
+    
+  } 
+  if (goodHash == false){
+        for (var i=0;i<trackList.length;i++){
+          settings[i] = {volume: 1, pan: 0, mid: 0, midFreq: 3500, low: 0, high: 0} ;
+        }      
+      }  
+}
+loadHash();
+
+
+
+
+// Fix up prefixing
+window.AudioContext = window.AudioContext || window.webkitAudioContext;
+var context = new AudioContext();
+
+function loadTrack(url, i) {
+  var request = new XMLHttpRequest();
+  request.open('GET', url, true);
+  request.responseType = 'arraybuffer';
+
+  // Decode asynchronously
+  request.onload = function() {
+    context.decodeAudioData(request.response, function(buffer) {
+      trackBuffers[i] = buffer;
+      //set defaults
+      low_shelf[i] = {filter: null, freq: 440, gain: 0};
+      high_shelf[i] = {filter: null, freq: 7000, gain: 0};
+      peaking[i] = {filter: null, freq: 3500, Q: 0.9, gain: 0};
+      panner[i] = {filter: null, position: [0,0,0.1]};
+      volume[i] = {filter: null, gain: 1};
+      muted[i] = false; 
+      solos[i] = false;
+      //check for and load hash values
+      if (goodHash == true){
+        low_shelf[i].gain = settings[i].low;
+        high_shelf[i].gain = settings[i].high;
+        peaking[i].gain = settings[i].mid;
+        peaking[i].frequency = settings[i].midFreq;
+        panner[i].position[0] = settings[i].pan;
+        volume[i].gain = settings[i].volume;      
+      }
+      
+
+
+     
+
+      loadingDot = $('<span>.<span>').appendTo('#loading');
+      bufferCount += 1;
+      if (bufferCount == trackList.length) 
+      {
+        doneMessage = $('<span>Done! (now press spacebar)<span>').appendTo('#loading');
+      }
+      duration = buffer.duration;
+    });
+  }
+  request.send();
+
+}
+
+//create master control & Analyzer
+masterTrack = context.createGain();
+masterTrack.gain.value = master;
+mainMeter = context.createAnalyser();
+  mainMeter.smoothingTimeConstant = 0.5;
+  mainMeter.fftSize = 32;
+mainMeter2 = context.createAnalyser();
+  mainMeter.smoothingTimeConstant = 0.5;
+  mainMeter.fftSize = 32;  
+analyzer = context.createAnalyser();
+  analyzer.smoothingTimeConstant = 0.5;
+  analyzer.fftsize = 32;  
+mainSplitter = context.createChannelSplitter();  
+
+//main connections  
+mainMeterNode = context.createScriptProcessor(2048, 1, 1);  
+  mainMeterNode.connect(context.destination);
+masterTrack.connect(mainSplitter);
+mainSplitter.connect(mainMeter,0,0);
+mainSplitter.connect(mainMeter2,1,0);
+masterTrack.connect(analyzer);
+analyzer.connect(context.destination);
+mainMeter.connect(mainMeterNode);
+masterTrack.connect(context.destination);
+
+//track filters
+for (var i=0;i<trackList.length;i++){
+  trackMeter[i] = context.createAnalyser();
+    trackMeter[i].smoothingTimeConstant = 0.3;
+    trackMeter[i].fftSize = 32; 
+}
+
+//start loading audio
+$(document).ready( function(){
+  trackBuilder();
+});
+
+//create tracks and load audio
+function trackBuilder(){
+
+  //create loop to build track divs, canvases and controls
+  for ( var i = 0, l = trackList.length; i < l; i++ ){
+    strip_filename = trackList[i].split('/');
+    name = strip_filename[strip_filename.length-1].split('.')[0];
+    trackDiv = $('<div class="fader" id="track' + i + '"><div><b>' + name + '</b></div>' + 
+        '<div><canvas id="trackHigh' + i +'" width="60" height="20"></canvas> high</div>' +
+        '<div><canvas id="trackMid' + i +'" width="60" height="20"></canvas> mid</div>' +
+        '<div><canvas id="trackMidFreq' + i +'" width="60" height="20"></canvas> mid freq</div>' + 
+        '<div><canvas id="trackLow' + i +'" width="60" height="20"></canvas> low</div>' +
+        '<div><canvas id="trackPanner' + i +'" width="60" height="20"></canvas> pan</div>' +  
+        '<div><div><b>volume</b></div><canvas id="trackVolume' + i +'" width="20" height="130"></canvas>' +
+        '<canvas id="trackMeter' + i + '" width="10" height="130" style="margin-left:10px;"></canvas><button id="muteTrack' + i + '" onclick="muteTrack(' + i + ')">Mute</button><button id="soloTrack' + i + '" onclick="soloTrack(' + i + ')">Solo</button></div></div>').appendTo('#mixer')
+        .appendTo('#mixer') ;
+
+    //array for control canvas contexts    
+    ctx[i] = {tracknum: i, volume: $("#trackVolume" + i).get()[0].getContext("2d"), meter: $("#trackMeter" + i).get()[0].getContext("2d"), panner: $("#trackPanner" + i).get()[0].getContext("2d"), low: $("#trackLow" + i).get()[0].getContext("2d"), mid: $("#trackMid" + i).get()[0].getContext("2d"), midFreq: $("#trackMidFreq" + i).get()[0].getContext("2d"), high: $("#trackHigh" + i).get()[0].getContext("2d")};
+
+
+
+
+  //filter controls  
+    //track fader
+    $("#trackVolume" + i).mousedown(function(f){
+      //set offset value and from drag
+      var tracknum = $(this).attr('id')[$(this).attr('id').length-1];
+      value = f.pageY - getPosition(this)[1];
+      drawTrackVolume(tracknum, value);
+      changeTrackVolume(tracknum,130-value);
+      $(this).on('mousemove',function(f){
+        value = f.pageY - getPosition(this)[1];
+        drawTrackVolume(tracknum, value);
+        changeTrackVolume(tracknum, 130-value);
+      });
+      //pause and play if was playing and unbind the dragging
+      $(this).mouseup(function(f){  
+        $(this).off('mousemove');
+      });
+      $(this).mouseleave(function(f){  
+        $(this).off('mousemove');
+      });
+    });
+    function drawTrackVolume(tracknum, value){
+      ctx[tracknum].volume.clearRect(0, 0, 20, 130);
+      ctx[tracknum].volume.fillStyle='#999';
+      ctx[tracknum].volume.fillRect(0,0,20,130);
+      ctx[tracknum].volume.fillStyle='#ccc';
+      ctx[tracknum].volume.fillRect(0,0,20,value);
+    }
+    drawTrackVolume(i, -settings[i].volume*65 + 130);    
+
+    //track panner
+    $("#trackPanner" + i).mousedown(function(f){
+      //set offset value and from drag
+      var tracknum = $(this).attr('id')[$(this).attr('id').length-1];
+      value = f.pageX - getPosition(this)[0];
+      drawTrackPanner(tracknum, value);
+      changeTrackPanner(tracknum,value);
+      $(this).on('mousemove',function(f){
+        value = f.pageX - getPosition(this)[0];
+        drawTrackPanner(tracknum, value);
+        changeTrackPanner(tracknum, value);
+      });
+      $(this).mouseup(function(f){  
+        $(this).off('mousemove');
+      });
+      $(this).mouseleave(function(f){  
+        $(this).off('mousemove');
+      });
+    });
+    function drawTrackPanner(tracknum, value){
+      ctx[tracknum].panner.clearRect(0, 0, 60, 20);
+      ctx[tracknum].panner.fillStyle='#ccc';
+      ctx[tracknum].panner.fillRect(0,0,60,20);
+      ctx[tracknum].panner.fillStyle='#999';
+      ctx[tracknum].panner.fillRect(value,0,2,20);
+    }
+    drawTrackPanner(i, settings[i].pan*30 + 30);   
+
+    //track low
+    $("#trackLow" + i).mousedown(function(f){
+      //set offset value and from drag
+      var tracknum = $(this).attr('id')[$(this).attr('id').length-1];
+      value = f.pageX - getPosition(this)[0];
+      drawTrackLow(tracknum, value);
+      changeTrackLow(tracknum,value);
+      $(this).on('mousemove',function(f){
+        value = f.pageX - getPosition(this)[0];
+        drawTrackLow(tracknum, value);
+        changeTrackLow(tracknum, value);
+      });
+      $(this).mouseup(function(f){  
+        $(this).off('mousemove');
+      });
+      $(this).mouseleave(function(f){  
+        $(this).off('mousemove');
+      });
+    });
+    function drawTrackLow(tracknum, value){
+      ctx[tracknum].low.clearRect(0, 0, 60, 20);
+      ctx[tracknum].low.fillStyle='#ccc';
+      ctx[tracknum].low.fillRect(0,0,60,20);
+      ctx[tracknum].low.fillStyle='#999';
+      ctx[tracknum].low.fillRect(value,0,2,20);
+    }
+    drawTrackLow(i, settings[i].low*2 + 30);  
+
+    //track mid freq
+    $("#trackMidFreq" + i).mousedown(function(f){
+      //set offset value and from drag
+      var tracknum = $(this).attr('id')[$(this).attr('id').length-1];
+      value = f.pageX - getPosition(this)[0];
+      drawTrackMidFreq(tracknum, value);
+      changeTrackMidFreq(tracknum,value);
+      $(this).on('mousemove',function(f){
+        value = f.pageX - getPosition(this)[0];
+        drawTrackMidFreq(tracknum, value);
+        changeTrackMidFreq(tracknum, value);
+      });
+      $(this).mouseup(function(f){  
+        $(this).off('mousemove');
+      });
+      $(this).mouseleave(function(f){  
+        $(this).off('mousemove');
+      });
+    });
+    function drawTrackMidFreq(tracknum, value){
+      ctx[tracknum].midFreq.clearRect(0, 0, 60, 20);
+      ctx[tracknum].midFreq.fillStyle='#ccc';
+      ctx[tracknum].midFreq.fillRect(0,0,60,20);
+      ctx[tracknum].midFreq.fillStyle='#999';
+      ctx[tracknum].midFreq.fillRect(value,0,2,20);
+    }
+    drawTrackMidFreq(i, (settings[i].midFreq - 500)/100);
+
+    //track mid
+    $("#trackMid" + i).mousedown(function(f){
+      //set offset value and from drag
+      var tracknum = $(this).attr('id')[$(this).attr('id').length-1];
+      value = f.pageX - getPosition(this)[0];
+      drawTrackMid(tracknum, value);
+      changeTrackMid(tracknum,value);
+      $(this).on('mousemove',function(f){
+        value = f.pageX - getPosition(this)[0];
+        drawTrackMid(tracknum, value);
+        changeTrackMid(tracknum, value);
+      });
+      $(this).mouseup(function(f){  
+        $(this).off('mousemove');
+      });
+      $(this).mouseleave(function(f){  
+        $(this).off('mousemove');
+      });
+    });
+    function drawTrackMid(tracknum, value){
+      ctx[tracknum].mid.clearRect(0, 0, 60, 20);
+      ctx[tracknum].mid.fillStyle='#ccc';
+      ctx[tracknum].mid.fillRect(0,0,60,20);
+      ctx[tracknum].mid.fillStyle='#999';
+      ctx[tracknum].mid.fillRect(value,0,2,20);
+    }
+    drawTrackMid(i, settings[i].mid*2 + 30);  
+
+    //track high
+    $("#trackHigh" + i).mousedown(function(f){
+      //set offset value and from drag
+      var tracknum = $(this).attr('id')[$(this).attr('id').length-1];
+      value = f.pageX - getPosition(this)[0];
+      drawTrackHigh(tracknum, value);
+      changeTrackHigh(tracknum,value);
+      $(this).on('mousemove',function(f){
+        value = f.pageX - getPosition(this)[0];
+        drawTrackHigh(tracknum, value);
+        changeTrackHigh(tracknum, value);
+      });
+      $(this).mouseup(function(f){  
+        $(this).off('mousemove');
+      });
+      $(this).mouseleave(function(f){  
+        $(this).off('mousemove');
+      });
+    });
+    function drawTrackHigh(tracknum, value){
+      ctx[tracknum].high.clearRect(0, 0, 60, 20);
+      ctx[tracknum].high.fillStyle='#ccc';
+      ctx[tracknum].high.fillRect(0,0,60,20);
+      ctx[tracknum].high.fillStyle='#999';
+      ctx[tracknum].high.fillRect(value,0,2,20);
+    }
+    drawTrackHigh(i, settings[i].high*2 + 30);   
+  
+    //call function to load track to buffer  
+    loadTrack(trackList[i], i);
+
+  }
+
+  //make master div
+  masterDiv = $('<div class="fader"><h3>Master</h3><h4>volume</h4><canvas id="masterFader" width="20" height="130"></canvas><canvas id="mainMeter" width="17" height="130"></canvas></div>').prependTo('#mixer'); 
+  analyzerDiv = $('<div class="analyzer"><canvas id="analyzer" width="513" height="300"></div>').prependTo('#analyzeThis')
+  
+  //set body width
+  $('body').css('width',trackList.length*173 + 101 + 'px')
+
+  //get contexts for analyzer, main meter and master fader
+  ctxa = $("#analyzer").get()[0].getContext("2d");
+  ctxm = $("#mainMeter").get()[0].getContext("2d");
+  ctxmf = $('#masterFader').get()[0].getContext("2d");
+
+  //master fader
+  $("#masterFader").mousedown(function(f){
+    //set offset value and from drag
+    value = f.pageY - getPosition(this)[1];
+    console.log(value);
+    drawMasterFader(value);
+    changeMaster(130-value);
+    $(this).on('mousemove',function(f){
+      value = f.pageY - getPosition(this)[1];
+      drawMasterFader(value);
+      changeMaster(130-value);
+    });
+    $(this).mouseup(function(f){  
+      $(this).off('mousemove');
+    });
+    $(this).mouseleave(function(f){  
+        $(this).off('mousemove');
+      });
+  });
+  function drawMasterFader(value){
+    ctxmf.clearRect(0, 0, 20, 130);
+    ctxmf.fillStyle='#999';
+    ctxmf.fillRect(0,0,20,130);
+    ctxmf.fillStyle='#ccc';
+    ctxmf.fillRect(0,0,20,value);
+  }
+  drawMasterFader(65);
+
+
+
+  //all metering / analyzer functions fired from the main scriptProcessorNode
+  mainMeterNode.onaudioprocess = function() {
+ 
+    // get the average, bincount is fftsize / 2
+    var array =  new Uint8Array(analyzer.frequencyBinCount);
+    analyzer.getByteFrequencyData(array);
+    var average = getAverageVolume(array)
+
+    var array2 =  new Uint8Array(mainMeter.frequencyBinCount);
+    mainMeter.getByteFrequencyData(array2);
+    var leftAverage = getAverageVolume(array2);
+
+    var array3 =  new Uint8Array(mainMeter2.frequencyBinCount);
+    mainMeter2.getByteFrequencyData(array3);
+    var rightAverage = getAverageVolume(array3);
+
+    //master track volume
+    // clear the current state
+    ctxm.clearRect(0, 0, 17, 130);
+    // set the fill style
+    ctxm.fillStyle='#999999';
+    // create the left meter
+    ctxm.fillRect(10,130-leftAverage,3,130);
+    //create the right meter
+    ctxm.fillRect(14,130-rightAverage,3,130);
+
+    //analyzer
+    // clear the current state
+    ctxa.clearRect(0, 0, 1025, 300);
+    // set the fill style
+    ctxa.fillStyle='#999';
+    // create the bars
+    drawSpectrum(array);
+
+    function drawSpectrum(array) {
+      for ( var i = 0, j = 0; i < (array.length); i = i + 12, j++ ){
+            var value2 = array[i];
+            ctxa.fillRect(i/4,299-value2,2,300);
+      }
+    };
+   
+    
+   //make track meters
+    for (var j =0; j < trackList.length; j++){
+    
+        // get the average, bincount is fftsize / 2
+        var trackarray =  new Uint8Array(trackMeter[j].frequencyBinCount);
+        trackMeter[j].getByteFrequencyData(trackarray);
+        var trackaverage = getAverageVolume(trackarray);
+ 
+        // clear the current state
+        ctx[j].meter.clearRect(0, 0, 10, 130);
+        // set the fill style
+        ctx[j].meter.fillStyle='#999999';
+ 
+        // create the meters
+        ctx[j].meter.fillRect(0,129-(trackaverage*2),2,130);
+        
+    }
+   
+
+
+    function getAverageVolume(array) {
+        var values = 0;
+        var average;
+ 
+        var length = array.length;
+ 
+        // get all the frequency amplitudes
+        for (var i = 0; i < length; i++) {
+            values += array[i];
+        }
+ 
+        average = values / length;
+        return average;
+    }    
+  }
+}
+
+
+
+function changeTrackVolume(tracknum, value){
+  volume[tracknum].gain = value/65;
+  volume[tracknum].filter.gain.value = volume[tracknum].gain;
+};
+
+function changeTrackPanner(tracknum, value){
+  panner[tracknum].position[0] = (value-30)/30;
+  panner[tracknum].filter.setPosition(panner[tracknum].position[0],panner[tracknum].position[1], panner[tracknum].position[2]);
+};
+
+function changeTrackMid(tracknum, value){
+  peaking[tracknum].gain = (value-30)/2;
+  peaking[tracknum].filter.gain.value = peaking[tracknum].gain;
+};
+
+function changeTrackMidFreq(tracknum, value){
+  peaking[tracknum].freq = 500 + value*100 ;
+  peaking[tracknum].filter.frequency.value = peaking[tracknum].freq;
+};
+
+function changeTrackHigh(tracknum, value){
+  high_shelf[tracknum].gain = (value-30)/2;
+  high_shelf[tracknum].filter.gain.value = high_shelf[tracknum].gain;
+};
+
+function changeTrackLow(tracknum, value){
+  low_shelf[tracknum].gain = (value-30)/2;
+  low_shelf[tracknum].filter.gain.value = low_shelf[tracknum].gain;
+};
+
+function changeMaster(value){
+  master = (value/65);
+  masterTrack.gain.value = master;
+};
+
+function muteTrack(tracknum){
+      if (muted[tracknum] == false && solos[tracknum] == false){ 
+        volume[tracknum].filter.gain.value = 0;  
+        muted[tracknum] = true;
+        $('#muteTrack' + tracknum).css('color','red');
+      }
+      else if (muted[tracknum] == true){
+        volume[tracknum].filter.gain.value = volume[tracknum].gain;  
+        muted[tracknum] = false;
+        $('#muteTrack' + tracknum).css('color','black');
+      } 
+    }
+
+function soloTrack(track){
+  var allSolosOff = 0; 
+  soloing = true;
+  if (solos[track] == false){
+    solos[track] = true;
+    $('#soloTrack' + track).css('color','green');
+    volume[track].filter.gain.value = volume[track].gain; 
+  }
+  else if (solos[track] == true){
+    solos[track] = false
+    $('#soloTrack' + track).css('color','black');
+  }
+
+
+  for ( var i = 0; i < trackList.length; i++){
+    if (solos[i] == false) {
+      allSolosOff++;
+      volume[i].filter.gain.value = 0;  
+      $('#soloTrack' + i).css('color','red');       
+    }       
+  }
+  if (allSolosOff == trackList.length){
+      soloing = false;
+      for ( var j = 0; j < trackList.length; j++){
+        solos[j] = false
+        $('#soloTrack' + j).css('color','black');
+        if (muted[j] == false)volume[j].filter.gain.value = volume[j].gain; 
+      }  
+    }
+
+}
+
+// rebuild source, filters and play
+function playTrack() {
+  for ( var i = 0, l = trackList.length; i < l; i++ ){
+
+
+    //create source
+    source[i] = context.createBufferSource(); 
+    source[i].buffer = trackBuffers[i];   
+
+    //declare filters
+    low_shelf[i].filter = context.createBiquadFilter();
+      low_shelf[i].filter.type = "lowshelf"; 
+      low_shelf[i].filter.frequency.value = low_shelf[i].freq;
+      low_shelf[i].filter.gain.value = low_shelf[i].gain; 
+
+    high_shelf[i].filter = context.createBiquadFilter();
+      high_shelf[i].filter.type = "highshelf"; 
+      high_shelf[i].filter.frequency.value = high_shelf[i].freq;
+      high_shelf[i].filter.gain.value = high_shelf[i].gain;   
+
+    peaking[i].filter = context.createBiquadFilter();
+      peaking[i].filter.type = "peaking"; 
+      peaking[i].filter.frequency.value = peaking[i].freq;
+      peaking[i].filter.Q.value = peaking[i].Q;
+      peaking[i].filter.gain.value = peaking[i].gain;     
+
+    panner[i].filter = context.createPanner();
+      panner[i].filter.setPosition(panner[i].position[0],panner[i].position[1],panner[i].position[2]);    
+      panner[i].filter.panningModel = "equalpower";
+
+    volume[i].filter = context.createGain();
+      if (muted[i] == false) volume[i].filter.gain.value = volume[i].gain;  
+      if (muted[i] == true) volume[i].filter.gain.value = 0;
+      if (soloing == true && solos[i] == false) volume[i].filter.gain.value = 0;
+
+
+    
+    
+    //make connections
+    source[i].connect(low_shelf[i].filter);
+    low_shelf[i].filter.connect(high_shelf[i].filter);
+    high_shelf[i].filter.connect(peaking[i].filter);
+    peaking[i].filter.connect(panner[i].filter);
+    panner[i].filter.connect(volume[i].filter);
+    volume[i].filter.connect(trackMeter[i]);
+    volume[i].filter.connect(masterTrack); 
+
+
+  
+
+    //play  
+
+    source[i].start(0,offset);
+    transport = context.currentTime;
+    playing = true;                       
+  }                      
+  
+
+}
+
+//pause
+function pauseTrack() { 
+  for ( var i = 0, l = trackList.length; i < l; i++ ){
+    //get settings
+    settings[i] = {volume: volume[i].gain, pan: panner[i].position[0], mid: peaking[i].gain, midFreq: peaking[i].freq, low: low_shelf[i].gain, high: high_shelf[i].gain} ;
+    source[i].stop(0);
+    source[i] = null;
+    playing = false;  
+  }                   
+  
+  str = JSON.stringify(settings);
+  window.location.hash = str;                 
+}
+
+//timer function - also draws the timeSlider
+function updateTimer(){
+
+  //set max time
+  if (duration < offset) {
+    offset = duration;
+    pauseTrack();   
+    document.getElementById("timer").innerHTML = timerString(offset);  
+  }
+
+  //set minimum time
+  if (offset < 0) {
+    offset = 0;
+    pauseTrack();
+    document.getElementById("timer").innerHTML = timerString(offset); 
+  } 
+
+  //update timer (made acurate thanks to the web audio API's currentTimer)
+  if (playing == true) {
+    transport = context.currentTime - transport;
+    offset = offset + transport; 
+    if (offset != 0) document.getElementById("timer").innerHTML = timerString(offset); 
+    //this line may be unnecessary - originally that padding function worked for everything but zero
+    if (offset == 0) document.getElementById("timer").innerHTML = '00:00.00'; 
+    transport = context.currentTime;    
+  }
+
+  drawSlider(); 
+
+  //draw time slider
+  function drawSlider(){
+    ctxt.clearRect(0, 0, 10, 1000);
+        ctxt.fillStyle='#ccc';
+        ctxt.fillRect(0,0,duration,6);
+        ctxt.fillStyle='#999';
+        ctxt.fillRect(0,0,offset,6);
+  }
+
+  //make string for timer (use floor/rounding and pad with zeros)
+  function timerString(time){
+    minutes = Math.floor(time/60);
+    seconds = Math.floor(time - (minutes*60));
+    centiseconds = time - Math.floor(time);
+    string = zeroPad(minutes,2) + ":" + zeroPad(seconds,2) + '.' + zeroPad(Math.round(centiseconds*100),2);
+    return string;  
+  }  
+
+  //zero padding function
+  function zeroPad(num, places) {
+    var zero = places - num.toString().length + 1;
+    return Array(+(zero > 0 && zero)).join("0") + num;
+  }
+}
+
+//set the timer to 10 milliseconds
+window.setInterval(updateTimer,10);
+
+
+//get element position
+function getPosition(element){
+  var el = $(element);
+  var position = [el.offset().left, el.offset().top];
+  return position;
+}
+
+ // controlling timer
+$("#timeSlider").mousedown(function(e){
+  var wasPlaying = false;
+  if (playing == true){
+    wasPlaying = true;    
+  } 
+
+  //set offset value and from drag
+    offset = e.pageX - getPosition(this)[0];
+  $(this).on('mousemove',function(e){
+    offset = e.pageX - getPosition(this)[0];
+  });
+
+  //pause and play if was playing and unbind the dragging
+  $(this).mouseup(function(e){
+    if (wasPlaying == true) {
+      pauseTrack();
+      playTrack();
+    }  
+    $(this).off('mousemove');
+    $(this).mouseleave(function(f){  
+        $(this).off('mousemove');
+      });
+  });
+
+});
+
+//play/pause with space bar
+$(window).bind('keydown', function(e){
+  if ( e.keyCode != 32) return;
+  e.preventDefault();
+  !playing ? playTrack() : pauseTrack();           
+});
+
+//fast forward with right arrow
+$(window).bind('keydown', function(e){
+  if ( e.keyCode != 39) return;
+  if(playing == true) pauseTrack();
+  offset = offset + 3;
+  playTrack();           
+});
+
+//rewind with left arrow
+$(window).bind('keydown', function(e){
+  if ( e.keyCode != 37) return;
+  if(playing == true) pauseTrack();
+  offset = offset - 3;
+  playTrack();           
+});
+
+
+
+

@@ -10,6 +10,6 @@ class CreateVersions < ActiveRecord::Migration
     end
     add_index :versions, [:project_id, :created_at]
     add_index :versions, [:collaborator_id, :created_at]
-    add_index :versions, [:collaborator_id, :project_id], unique: true
+    
   end
 end

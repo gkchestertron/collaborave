@@ -3,19 +3,22 @@
   <aside class="span4">
     <section>
       <h1>
-        <%= gravatar_for @user %>
+        <%= gravatar_for @user, size: 150 %>
         <%= @project.name %>
+        <br>
+        by 
+        <br>
+        <%= @project.author.name %>
       </h1>
     </section> 
   </aside>
-
-  <section>
-    <div>
-      <span>Upload a Track</span> 
-    </div> 
-    <%= render 'tracks/trackform' %>
-  </section>
+</div>
   
+<div class="row"> 
+<%= render 'board' %>
+  <% if @user == current_user %> 
+
+    <%= render 'tracks/trackform' %>
   <div class="span8">
     <% if @project.tracks.any? %>
       <h3>Tracks (<%= @project.tracks.count %>)</h3>
@@ -25,7 +28,9 @@
       <%= will_paginate @versions %>
     <% end %>
   </div>
+  <% end %>
   <div class="span8">
+    <%= render 'versions/version_form' %>
     <% if @project.versions.any? %>
       <h3>Versions (<%= @project.versions.count %>)</h3>
       <ol class="microposts">
@@ -34,4 +39,10 @@
       <%= will_paginate @versions %>
     <% end %>
   </div>
+
+
 </div>
+
+
+
+

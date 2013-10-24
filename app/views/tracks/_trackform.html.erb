@@ -1,3 +1,4 @@
+
 <% if !@track.errors.empty? %>
   <div class="alert alert-error">
     <ul>
@@ -9,6 +10,7 @@
 <% end %>
 
 <div class="well">
+  <h3>Upload a Track</h3> 
   <%= form_for @track, html: { multipart: true } do |f| %>
     <%= f.label :track_name %>
     <%= f.text_field :track_name %>

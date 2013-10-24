@@ -1,0 +1,34 @@
+
+  
+  
+
+  <div id="analyzeThis">
+    <h2>Press spacebar to stop/start. Use Arrow keys for ff/rew.</h2>
+    <div>
+      <h1 id="timer">00:00.00</h1> 
+      <canvas id = "timeSlider" width="600" height="10" style="display: block;"></canvas>
+    </div>
+  </div>
+
+  <div id="mixer"></div>
+ 
+  
+
+  <h3 id="loading">Loading(this may take a minute)...</h3>
+
+
+
+<script type="text/javascript">
+var source_array = <%= raw @track_urls.as_json %>
+</script>
+<%= javascript_include_tag "board" %>
+
+ 
+
+
+
+
+
+
+	
+	

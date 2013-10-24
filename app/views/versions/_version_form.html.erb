@@ -1,0 +1,25 @@
+
+<% if !@version.errors.empty? %>
+  <div class="alert alert-error">
+    <ul>
+      <% @version.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<div class="well">
+  <h3>Save your own version</h3> 
+  <%= form_for @version, html: { multipart: true } do |f| %>
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+    
+    <%= f.hidden_field :project_id, value: @project.id %>
+   
+    <%= f.hidden_field :collaborator_id, value: current_user.id %>
+    
+    <%= f.hidden_field :settings, value: "test" %>
+    <%= f.submit "Save", class: "btn btn-primary" %>
+  <% end %>
+</div>

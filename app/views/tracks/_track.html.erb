@@ -1,6 +1,5 @@
 <% if track.id !=nil %>
 <li>
-	<%= link_to track.track_name, track.path_url %>
-	<%= button_to "Delete",  track, method: :delete, class: "btn btn-danger", confirm: "Are you sure that you wish to delete #{track.track_name}?" %>
+	<%= link_to track.track_name, track.path_url %><%= button_to "Delete",  track, method: :delete, class: "btn btn-mini btn-danger", confirm: "Are you sure that you wish to delete #{track.track_name}?" %>
 </li>	
 <% end %>
