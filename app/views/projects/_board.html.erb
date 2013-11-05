@@ -11,7 +11,8 @@
   </div>
 
   <div id="mixer"></div>
-
+<!--
+  uncomment to build recorder
   <canvas id="analyser" width="768" height="200"></canvas><br>
   <canvas id="wavedisplay" width="768" height="200"></canvas><br>
  
@@ -21,7 +22,7 @@
   <%= image_tag('save.svg', onclick:'saveAudio();') %>
  
   
-
+-->
   
 
 
@@ -31,9 +32,13 @@ var source_array = <%= raw @track_urls.as_json %>
 var names_array = <%= raw @track_names.as_json %>
 </script>
 <%= javascript_include_tag "AudioContextMonkeyPatch" %>
-<%= javascript_include_tag "audiodisplay" %>
+<!--
+uncomment to build recorder
+ <%= javascript_include_tag "audiodisplay" %>
 <%= javascript_include_tag "recorder" %>
 <%= javascript_include_tag "main" %>
+
+ -->
 <%= javascript_include_tag "board" %>
 
  
