@@ -83,7 +83,7 @@ function loadTrack(url, i) {
     context.decodeAudioData(request.response, function(buffer) {
       trackBuffers[i] = buffer;
       
-      drawBuffer( 500, 200, wavctx[i], trackBuffers[i] );
+      //drawBuffer( 500, 200, wavctx[i], trackBuffers[i] );
       //set defaults
       low_shelf[i] = {filter: null, freq: 440, gain: 0};
       high_shelf[i] = {filter: null, freq: 7000, gain: 0};
@@ -174,7 +174,7 @@ function trackBuilder(){
         '<div><canvas id="trackLow' + i +'" width="60" height="20"></canvas> low</div>' +
         '<div><canvas id="trackPanner' + i +'" width="60" height="20"></canvas> pan</div>' +  
         '<div><div><b>volume</b></div><canvas id="trackVolume' + i +'" width="20" height="130"></canvas>' +
-        '<canvas id="trackMeter' + i + '" width="10" height="130" style="margin-left:10px;"></canvas><button id="muteTrack' + i + '" onclick="muteTrack(' + i + ')">Mute</button><button id="soloTrack' + i + '" onclick="soloTrack(' + i + ')">Solo</button></div></div><canvas width="500" height="200" class="wavform" id ="wavform' + i + '"></canvas>').appendTo('#mixer')
+        '<canvas id="trackMeter' + i + '" width="10" height="130" style="margin-left:10px;"></canvas><button id="muteTrack' + i + '" onclick="muteTrack(' + i + ')">Mute</button><button id="soloTrack' + i + '" onclick="soloTrack(' + i + ')">Solo</button></div></div><canvas width="498" height="324" class="wavform" id ="wavform' + i + '"></canvas>').appendTo('#mixer')
         .appendTo('#mixer') ;
 
     //array for control canvas contexts    
@@ -670,7 +670,7 @@ window.setInterval(updateTimer,10);
 //get element position
 function getPosition(element){
   var el = $(element);
-  var position = [el.timeoffset().left, el.timeoffset().top];
+  var position = [el.offset().left, el.offset().top];
   return position;
 }
 
