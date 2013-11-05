@@ -17,9 +17,28 @@
       margin:10px;
       padding:10px;
       border: 1px solid #ccc;
-      width:257px;
-      position: fixed;
-      right: 0px;
-      top: 42px;
+      width:652px;
+      
+    
       background: rgba(255,255,255,.8);
     }
+
+    #analyzer {
+      margin-left: 65px;
+    }
+
+    #master {
+      width:130px;
+    }
+
+    #track_path {
+      width:180px;
+    }
+
+#record.recording { 
+  background: red;
+  background: -webkit-radial-gradient(center, ellipse cover, #ff0000 0%, #fff 75%, #fff 100%, #fff 100%); }
+
+.wavform {
+  border: 1px solid #ccc;
+}   

@@ -16,5 +16,6 @@
       </ol>
       <%= will_paginate @projects %>
     <% end %>
+    <h2>Total space remaining: <%= (100000000 - @total_files_size)/1000000.00 %> megabytes.</h2>
   </div>
 </div>

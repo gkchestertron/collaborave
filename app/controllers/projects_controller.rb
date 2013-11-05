@@ -5,13 +5,17 @@ class ProjectsController < ApplicationController
 		@project = current_user.projects.build(project_params)
 		if @project.save
 			flash[:success] = "Project created!"
-			redirect_to root_url
+			redirect_to @project
 		else
 			render 'static_pages/home'
 		end	
 	end
 
 	def destroy
+		@project = Project.find(params[:id])
+    	@project.destroy
+    	@user = @project.author
+    	redirect_to root_url, notice:  "The project \"#{@project.name}\" has been deleted."
 	end
 
 	def show
@@ -26,7 +30,12 @@ class ProjectsController < ApplicationController
     	@track.project_id = @project.id
     	@tracks = @project.tracks.all
     	@track_urls = []
-    	@tracks.each {|track| @track_urls << track.path.url if track.path.url != nil}
+    	@track_names = []
+    	@tracks.each  do |track| 
+    		@track_urls << track.path.url if track.path.url != nil
+    		@track_names << track.track_name if track.path.url != nil
+    	end
+
   	end
 
 

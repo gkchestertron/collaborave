@@ -1,8 +1,9 @@
 class StaticPagesController < ApplicationController
-  def home
+  def home 
     if signed_in?
-      @project  = current_user.projects.build(author_id: current_user)
+      @new_project  = current_user.projects.build(author_id: current_user)
       @user = current_user
+      @projects = @user.projects.paginate(page: params[:page])
     else
       @project = Project.find(1)
       @user = @project.author
@@ -13,10 +14,16 @@ class StaticPagesController < ApplicationController
       @track.project_id = @project.id
       @tracks = @project.tracks.all
       @track_urls = []
-      @tracks.each {|track| @track_urls << track.path.url if track.path.url != nil}
-
+      @track_names = []
+      @tracks.each  do |track| 
+        @track_urls << track.path.url if track.path.url != nil
+        @track_names << track.track_name if track.path.url != nil
+      end
     end
 
+  end
+
+  def show
   end
 
 

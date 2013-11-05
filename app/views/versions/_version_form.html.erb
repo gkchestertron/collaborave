@@ -10,7 +10,7 @@
 <% end %>
 
 <div class="well">
-  <h3>Save your own version</h3> 
+  <h4>Save your own version</h4> 
   <%= form_for @version, html: { multipart: true } do |f| %>
     <%= f.label :name %>
     <%= f.text_field :name %>
@@ -19,7 +19,7 @@
    
     <%= f.hidden_field :collaborator_id, value: current_user.id %>
     
-    <%= f.hidden_field :settings, value: "test" %>
+    <%= f.hidden_field :settings, :id=>"settings_field" %>
     <%= f.submit "Save", class: "btn btn-primary" %>
   <% end %>
 </div>

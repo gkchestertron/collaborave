@@ -10,14 +10,12 @@
 <% end %>
 
 <div class="well">
-  <h3>Upload a Track</h3> 
+  <h4>Upload a Track</h4> 
   <%= form_for @track, html: { multipart: true } do |f| %>
+    <%= f.file_field :path %>
     <%= f.label :track_name %>
     <%= f.text_field :track_name %>
-    <%= f.label :path %>
-    <%= f.file_field :path %>
-    <%= f.label :project_id %>
     <%= f.hidden_field :project_id, value: @project.id %>
-    <%= f.submit "Save", class: "btn btn-primary" %>
+    <%= f.submit "Upload", class: "btn btn-primary" %>
   <% end %>
 </div>

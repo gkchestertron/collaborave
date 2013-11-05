@@ -1,26 +1,39 @@
 
   
-  
 
   <div id="analyzeThis">
+    <h2 id="loading">Loading (this may take a minute)...</h2>
     <h2>Press spacebar to stop/start. Use Arrow keys for ff/rew.</h2>
     <div>
       <h1 id="timer">00:00.00</h1> 
-      <canvas id = "timeSlider" width="600" height="10" style="display: block;"></canvas>
+      <canvas id="timeSlider" width="600" height="10" style="display: block;"></canvas>
     </div>
   </div>
 
   <div id="mixer"></div>
+
+  <canvas id="analyser" width="768" height="200"></canvas><br>
+  <canvas id="wavedisplay" width="768" height="200"></canvas><br>
+ 
+  <%= image_tag('mic128.png', id: 'record', width: '128', height: '128', onclick: 'recordAndPlay(this);') %>
+  <br>
+  
+  <%= image_tag('save.svg', onclick:'saveAudio();') %>
  
   
 
-  <h3 id="loading">Loading(this may take a minute)...</h3>
+  
 
 
 
 <script type="text/javascript">
 var source_array = <%= raw @track_urls.as_json %>
+var names_array = <%= raw @track_names.as_json %>
 </script>
+<%= javascript_include_tag "AudioContextMonkeyPatch" %>
+<%= javascript_include_tag "audiodisplay" %>
+<%= javascript_include_tag "recorder" %>
+<%= javascript_include_tag "main" %>
 <%= javascript_include_tag "board" %>
 
  

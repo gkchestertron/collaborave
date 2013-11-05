@@ -1,7 +1,9 @@
 <li>
-  <span class="content"><%= version.name %></span>
+
+  <span class="content"><a onclick="updateVersion('<%= version.settings %>')"><%= version.name %></a></span>
   <span class="timestamp">
-    Created <%= time_ago_in_words(version.created_at) %> ago by <%= version.collaborator.name %>.
+    Created <%= time_ago_in_words(version.created_at) %> ago by <%= version.collaborator.name %>. 
+    
   </span>
   <%= button_to "Delete",  version, method: :delete, class: "btn btn-mini btn-danger", confirm: "Are you sure that you wish to delete #{version.name}?" %>
 </li>

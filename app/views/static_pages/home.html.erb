@@ -4,22 +4,52 @@
       <section>
         <%= render 'shared/user_info' %>
       </section>
-      <section>
-        <%= render 'shared/project_form' %>
-      </section>
     </aside>
+    <section class="span8">
+      <% if @user.projects.any? %>
+      <h3>Projects (<%= @user.projects.count %>)</h3>
+        <ol class="microposts">
+         <%= render @projects %>
+        </ol>
+        <%= will_paginate @projects %>
+      <% end %>
+
+        <div class="well">
+          <h4>Create a new project.</h4>
+          <%= render 'shared/project_form' %>
+        </div>
+      </section>
+
   </div>
 <% else %>
   <div class="center hero-unit">
     <h1>Welcome to Collaborave!</h1>
-
+    <div id="home_message">
     <h2>
-      This is the homepage of awesome.
+      Try out the Collaborave mixer below or signup to start your own project, upload tracks and save your own mixes!
     </h2>
-
+  </div>
     <%= link_to "Sign up now!", signup_path,
                                 class: "btn btn-large btn-primary" %>
   </div>
   
-  <%= render 'projects/board' %>
+  <div class="row"> 
+<div class="span9">  
+<%= render 'projects/board' %>
+</div>
+<div class="span3">
+    
+    <% if @project.versions.any? %>
+      <h3>Versions (<%= @project.versions.count %>)</h3>
+      <ol class="microposts">
+        <%= render @versions %>
+      </ol>
+      <%= will_paginate @versions %>
+    <% end %>
+   
+  </div>
+  </div>
+
+
+
 <% end %>

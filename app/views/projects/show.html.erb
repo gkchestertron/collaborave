@@ -15,33 +15,36 @@
 </div>
   
 <div class="row"> 
-<%= render 'board' %>
+  <div class="span9">  
+    <%= render 'board' %>
+  </div>
+  <div class="span3">
+    <h3>Versions (<%= @project.versions.count %>)</h3>
+    <% if @project.versions.any? %>  
+        <ol class="microposts">
+          <%= render @versions %>
+        </ol>
+        <%= will_paginate @versions %>
+    <% end %>
+    <%= render 'versions/version_form' %>
+  </div>
   <% if @user == current_user %> 
 
-    <%= render 'tracks/trackform' %>
-  <div class="span8">
-    <% if @project.tracks.any? %>
-      <h3>Tracks (<%= @project.tracks.count %>)</h3>
-      <ol class="microposts">
-        <%= render @tracks %>
-      </ol>
-      <%= will_paginate @versions %>
-    <% end %>
-  </div>
+    <div class="span3">
+   
+      <% if @project.tracks.any? %>
+        <h3>Tracks (<%= @project.tracks.count %>)</h3>
+        <ol class="microposts">
+          <%= render @tracks %>
+        </ol>
+        
+      <% end %>
+      <%= render 'tracks/trackform' %>
+    </div>
   <% end %>
-  <div class="span8">
-    <%= render 'versions/version_form' %>
-    <% if @project.versions.any? %>
-      <h3>Versions (<%= @project.versions.count %>)</h3>
-      <ol class="microposts">
-        <%= render @versions %>
-      </ol>
-      <%= will_paginate @versions %>
-    <% end %>
-  </div>
-
 
 </div>
+
 
 
 
