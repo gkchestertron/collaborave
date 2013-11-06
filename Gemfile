@@ -7,7 +7,8 @@ gem 'bootstrap-sass', '2.3.2.0'
 gem 'bcrypt-ruby', '3.0.1'
 gem 'will_paginate', '3.0.4'
 gem 'bootstrap-will_paginate', '0.0.9'
-
+gem 'carrierwave', '~> 0.9'
+gem 'rails_12factor'
 gem 'carrierwave-ftp', :require => 'carrierwave/storage/ftp' # FTP only
 
 group :development, :test do
