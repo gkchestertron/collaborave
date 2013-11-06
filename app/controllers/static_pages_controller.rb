@@ -5,7 +5,7 @@ class StaticPagesController < ApplicationController
       @user = current_user
       @projects = @user.projects.paginate(page: params[:page])
     else
-      @project = Project.find(1)
+      
       @user = @project.author
       @version = Version.new
       
