@@ -5,6 +5,7 @@ require "active_record/railtie"
 require "action_controller/railtie"
 require "action_mailer/railtie"
 require "sprockets/railtie"
+require 'carrierwave/storage/ftp'
 # require "rails/test_unit/railtie"
 
 # Require the gems listed in Gemfile, including any gems
@@ -27,3 +28,5 @@ module Collaborave
     config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)
   end
 end
+
+
