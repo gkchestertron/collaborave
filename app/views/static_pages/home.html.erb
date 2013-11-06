@@ -33,20 +33,7 @@
                                 class: "btn btn-large btn-primary" %>
   </div>
   
-  <div class="row"> 
-
-<div class="span3">
-    
-    <% if @project.versions.any? %>
-      <h3>Versions (<%= @project.versions.count %>)</h3>
-      <ol class="microposts">
-        <%= render @versions %>
-      </ol>
-      <%= will_paginate @versions %>
-    <% end %>
-   
-  </div>
-  </div>
+ 
 
 
 
