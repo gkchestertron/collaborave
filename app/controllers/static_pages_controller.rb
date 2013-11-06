@@ -4,10 +4,7 @@ class StaticPagesController < ApplicationController
       @new_project  = current_user.projects.build(author_id: current_user)
       @user = current_user
       @projects = @user.projects.paginate(page: params[:page])
-    
-      end
-  end
-
+    end
   end
 
   def show
