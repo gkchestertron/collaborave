@@ -13,13 +13,18 @@
   <div id="mixer"></div>
 
   <canvas id="analyser" width="768" height="200"></canvas><br>
-  <canvas id="wavedisplay" width="768" height="200"></canvas><br>
  
+ <div class="well">
+  <h1>Record a track</h1>
+  <h2>This is rough—you can only start from the beginning. You have to download, convert to mp3 and upload yourself. But hey—it works.</h2>
+  <h2>Click on the microphone to start/stop. Click on the hard drive to download. You can only upload tracks if you are signed in.</h2>
   <%= image_tag('mic128.png', id: 'record', width: '128', height: '128', onclick: 'recordAndPlay(this);') %>
   <br>
   
   <%= image_tag('save.svg', onclick:'saveAudio();') %>
- 
+
+   <canvas id="wavedisplay" width="664" height="200"></canvas><br>
+ </div>
   
 
   
