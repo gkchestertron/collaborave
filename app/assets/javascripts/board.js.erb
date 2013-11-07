@@ -814,7 +814,8 @@ function updateVersion(hash){
 
 //adding record functionality
 function recordAndPlay(e){
-
+  toggleRecording(e);
+  
   if (playing == false){
     timeoffset = 0;
     playTrack();
@@ -824,6 +825,6 @@ function recordAndPlay(e){
     pauseTrack();
   }
     
-  toggleRecording(e);
+  
 }
 
