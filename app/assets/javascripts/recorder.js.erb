@@ -45,6 +45,9 @@ DEALINGS IN THE SOFTWARE.
           e.inputBuffer.getChannelData(1)
         ]
       });
+      if (!playing) {
+            playTrack();
+          }
     }
 
     this.configure = function(cfg){
