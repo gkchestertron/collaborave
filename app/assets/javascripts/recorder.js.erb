@@ -38,9 +38,7 @@ DEALINGS IN THE SOFTWARE.
 
     this.node.onaudioprocess = function(e){
       if (!recording) return;
-      if (!playing) {
-            playTrack();
-          }
+
       worker.postMessage({
         command: 'record',
         buffer: [
@@ -61,6 +59,10 @@ DEALINGS IN THE SOFTWARE.
 
     this.record = function(){
       recording = true;
+      if (!playing) {
+            timeoffset = 0; 
+            playTrack();
+          }
     }
 
     this.stop = function(){

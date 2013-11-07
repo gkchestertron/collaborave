@@ -58,7 +58,9 @@ function toggleRecording( e ) {
             return;
         e.classList.add("recording");
         audioRecorder.clear();
+
         audioRecorder.record();
+        
     }
 }
 
