@@ -23,7 +23,7 @@ var soloing = false;
 var timeoffset = 0;
 var transport = 0;
 var trackList = source_array;
-var duration;
+var duration = 0;
 var source = new Array();
 var muted = [];
 var solos = [];
@@ -116,7 +116,9 @@ function loadTrack(url, i) {
 
         
       }
-      duration = buffer.duration;
+      if (duration < buffer.duration) {
+        duration = buffer.duration;
+      }
     });
   }
   request.send();
@@ -814,6 +816,7 @@ function updateVersion(hash){
 function recordAndPlay(e){
 
   if (playing == false){
+    timeoffset = 0;
     playTrack();
   }
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131023153213) do
+ActiveRecord::Schema.define(version: 20131106140513) do
 
   create_table "collabs", force: true do |t|
     t.integer  "project_id"
@@ -67,7 +67,7 @@ ActiveRecord::Schema.define(version: 20131023153213) do
   add_index "version_files", ["version_id"], name: "index_version_files_on_version_id"
 
   create_table "versions", force: true do |t|
-    t.string   "settings"
+    t.text     "settings"
     t.integer  "project_id"
     t.integer  "collaborator_id"
     t.string   "name"
