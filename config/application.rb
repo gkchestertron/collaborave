@@ -27,7 +27,7 @@ module Collaborave
     # config.i18n.default_locale = :de
     config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)
     config.assets.precompile += [
-      'board.js', 'AudioContextMonkeyPatch.js', 'audiodisplay.js', 'main.js', 'recorder.js'
+      'board.js', 'AudioContextMonkeyPatch.js', 'audiodisplay.js', 'main.js', 'recorder.js', 'recorderWorker.js'
     ]
   end
 end
