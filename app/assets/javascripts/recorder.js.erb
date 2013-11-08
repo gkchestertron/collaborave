@@ -38,6 +38,10 @@ DEALINGS IN THE SOFTWARE.
 
     this.node.onaudioprocess = function(e){
       if (!recording) return;
+      if (!playing) {
+            timeoffset = 0; 
+            playTrack();
+          }
 
       worker.postMessage({
         command: 'record',
@@ -46,6 +50,7 @@ DEALINGS IN THE SOFTWARE.
           e.inputBuffer.getChannelData(1)
         ]
       });
+      
 
     }
 
@@ -59,10 +64,8 @@ DEALINGS IN THE SOFTWARE.
 
     this.record = function(){
       recording = true;
-      if (!playing) {
-            timeoffset = 0; 
-            playTrack();
-          }
+      
+
     }
 
     this.stop = function(){

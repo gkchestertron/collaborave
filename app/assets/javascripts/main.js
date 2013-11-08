@@ -60,7 +60,7 @@ function toggleRecording( e ) {
         audioRecorder.clear();
 
         audioRecorder.record();
-        
+
     }
 }
 
@@ -168,4 +168,4 @@ function initAudio() {
         });
 }
 
-window.addEventListener('load', initAudio );
+ window.addEventListener('load', initAudio );

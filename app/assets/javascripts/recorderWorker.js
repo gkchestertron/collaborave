@@ -56,6 +56,8 @@ function record(inputBuffer){
 }
 
 function exportWAV(type){
+  recBuffersL.shift();
+  recBuffersR.shift();
   var bufferL = mergeBuffers(recBuffersL, recLength);
   var bufferR = mergeBuffers(recBuffersR, recLength);
   var interleaved = interleave(bufferL, bufferR);
