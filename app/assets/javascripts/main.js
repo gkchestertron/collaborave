@@ -22,6 +22,8 @@ var rafID = null;
 var analyserContext = null;
 var canvasWidth, canvasHeight;
 var recIndex = 0;
+var monitor = false;
+var zeroGain;
 
 /* TODO:
 
@@ -131,6 +133,19 @@ function toggleMono() {
     audioInput.connect(inputPoint);
 }
 
+function toggleMonitor() {
+    if (monitor == false) {
+        zeroGain.gain.value = 1.0;
+        monitor = true;
+    }
+    else if (monitor == true) {
+        zeroGain.gain.value = 0.0;
+        monitor = false;
+    }
+
+    
+}
+
 function gotStream(stream) {
     inputPoint = audioContext.createGain();
 
@@ -148,7 +163,7 @@ function gotStream(stream) {
     audioRecorder = new Recorder( inputPoint );
 
     zeroGain = audioContext.createGain();
-    zeroGain.gain.value = 1.0;
+    zeroGain.gain.value = 0.0;
     inputPoint.connect( zeroGain );
     zeroGain.connect( audioContext.destination );
     updateAnalysers();
