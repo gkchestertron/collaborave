@@ -148,7 +148,7 @@ function gotStream(stream) {
     audioRecorder = new Recorder( inputPoint );
 
     zeroGain = audioContext.createGain();
-    zeroGain.gain.value = 0.0;
+    zeroGain.gain.value = 1.0;
     inputPoint.connect( zeroGain );
     zeroGain.connect( audioContext.destination );
     updateAnalysers();
