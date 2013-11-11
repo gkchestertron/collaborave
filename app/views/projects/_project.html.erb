@@ -1,7 +1,7 @@
 <li>
   <span class="content"><%= link_to project.name, project %></span>
   <span class="timestamp">
-    <% if current_user == @user %>
+    <% if current_user == project.author %>
     <%= button_to "Delete",  project, method: :delete, class: "btn btn-mini btn-danger", confirm: "Are you sure that you wish to delete #{project.name}?" %>
     Created <%= time_ago_in_words(project.created_at) %> ago.
     <% end %>

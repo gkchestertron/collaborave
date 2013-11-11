@@ -14,6 +14,7 @@ class UsersController < ApplicationController
     @user.projects.each do |project| 
       project.tracks.each {|track| @total_files_size = @total_files_size + track.path.file.size }
     end
+    @collab_projects = @user.collab_projects.paginate(page: params[:page])
 
   end
   

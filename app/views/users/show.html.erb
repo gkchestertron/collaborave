@@ -10,11 +10,18 @@
   </aside>
   <div class="span8">
     <% if @user.projects.any? %>
-      <h3>Projects (<%= @user.projects.count %>)</h3>
+      <h3>Projects - Author (<%= @user.projects.count %>)</h3>
       <ol class="microposts">
         <%= render @projects %>
       </ol>
       <%= will_paginate @projects %>
+    <% end %>
+     <% if @collab_projects.any? %>
+      <h3>Projects - Collaborator (<%= @user.collab_projects.count %>)</h3>
+      <ol class="microposts">
+        <%= render @collab_projects %>
+      </ol>
+      <%= will_paginate @collab_projects %>
     <% end %>
     <h2>Total space remaining: <%= (100000000 - @total_files_size)/1000000.00 %> megabytes.</h2>
   </div>

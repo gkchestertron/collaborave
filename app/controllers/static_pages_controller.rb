@@ -4,6 +4,11 @@ class StaticPagesController < ApplicationController
       @new_project  = current_user.projects.build(author_id: current_user)
       @user = current_user
       @projects = @user.projects.paginate(page: params[:page])
+      @total_files_size = 0
+    @user.projects.each do |project| 
+      project.tracks.each {|track| @total_files_size = @total_files_size + track.path.file.size }
+    end
+    @collab_projects = @user.collab_projects.paginate(page: params[:page])
     else
       @project = Project.find(1)
       @user = @project.author
