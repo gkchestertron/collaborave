@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
   has_many :reverse_collabs, foreign_key: "collaborator_id", class_name: "Collab", dependent: :destroy
   has_many :collab_projects, through: :reverse_collabs, source: :project, dependent: :destroy
   has_many :versions, foreign_key: "collaborator_id", dependent: :destroy
+  belongs_to :project, class_name: "Project"
   before_save { self.email = email.downcase }
   before_create :create_remember_token
   validates :name, presence: true, length: { maximum: 50 }

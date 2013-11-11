@@ -41,6 +41,18 @@
       <% end %>
       <%= render 'tracks/trackform' %>
     </div>
+
+    <div class="span3">
+   
+      <% if @project.collaborators.any? %>
+        <h3>Collaborators (<%= @project.collaborators.count %>)</h3>
+        <ol class="microposts">
+          <%= render @collaborators %>
+        </ol>
+        
+      <% end %>
+      
+    </div>
   <% end %>
 
 </div>

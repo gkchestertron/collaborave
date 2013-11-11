@@ -31,10 +31,14 @@ class ProjectsController < ApplicationController
     	@tracks = @project.tracks.all
     	@track_urls = []
     	@track_names = []
+    	
     	@tracks.each  do |track| 
     		@track_urls << track.path.url if track.path.url != nil
     		@track_names << track.track_name if track.path.url != nil
     	end
+
+    	@collaborator = @project.collabs.new
+    	@collaborators = @project.collaborators
 
   	end
 
