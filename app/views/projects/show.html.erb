@@ -28,7 +28,7 @@
     <% end %>
     <%= render 'versions/version_form' %>
   </div>
-  <% if @user == current_user %> 
+  <% if @user == current_user || @is_collaborator %> 
 
     <div class="span3">
    
@@ -46,15 +46,17 @@
    
       <% if @project.collaborators.any? %>
         <h3>Collaborators (<%= @project.collaborators.count %>)</h3>
-        <ol class="microposts">
+        <ol class="collaborators">
           <%= render @collaborators %>
         </ol>
         
       <% end %>
-      
-    </div>
+  <% end %>  
+  <% if @user == current_user %>    
+      <%= render 'collaborators/collaborator_form' %>
+    
   <% end %>
-
+  </div>
 </div>
 
 

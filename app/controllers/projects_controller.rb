@@ -21,6 +21,7 @@ class ProjectsController < ApplicationController
 	def show
 		
 		
+
     	@project = Project.find(params[:id])
     	@user = @project.author
     	@version = Version.new
@@ -39,6 +40,8 @@ class ProjectsController < ApplicationController
 
     	@collaborator = @project.collabs.new
     	@collaborators = @project.collaborators
+    	@is_collaborator = false
+    	@collaborators.each {|collaborator| @is_collaborator = true if collaborator == current_user }
 
   	end
 

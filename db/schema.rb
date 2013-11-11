@@ -11,13 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131106140513) do
+ActiveRecord::Schema.define(version: 20131111015319) do
 
   create_table "collabs", force: true do |t|
     t.integer  "project_id"
     t.integer  "collaborator_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "email"
   end
 
   add_index "collabs", ["collaborator_id"], name: "index_collabs_on_collaborator_id"
