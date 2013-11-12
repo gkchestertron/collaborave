@@ -42,7 +42,8 @@ class ProjectsController < ApplicationController
     	@collaborators = @project.collaborators
     	@is_collaborator = false
     	@collaborators.each {|collaborator| @is_collaborator = true if collaborator == current_user }
-
+    	@note = Note.new
+    	@notes = @project.notes.paginate(page: params[:page])
   	end
 
 

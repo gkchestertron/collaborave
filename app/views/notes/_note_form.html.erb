@@ -1,0 +1,24 @@
+
+<% if !@note.errors.empty? %>
+  <div class="alert alert-error">
+    <ul>
+      <% @note.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<div class="well">
+  <h4>Save your own note</h4> 
+  <%= form_for @note, html: { multipart: true } do |f| %>
+    <%= f.label :content %>
+    <%= f.text_field :content %>
+    
+    <%= f.hidden_field :project_id, value: @project.id %>
+   
+    <%= f.hidden_field :collaborator_id, value: current_user.id %>
+    
+    <%= f.submit "Save", class: "btn btn-primary" %>
+  <% end %>
+</div>

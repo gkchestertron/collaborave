@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131111015319) do
+ActiveRecord::Schema.define(version: 20131112143422) do
 
   create_table "collabs", force: true do |t|
     t.integer  "project_id"
@@ -24,6 +24,17 @@ ActiveRecord::Schema.define(version: 20131111015319) do
   add_index "collabs", ["collaborator_id"], name: "index_collabs_on_collaborator_id"
   add_index "collabs", ["project_id", "collaborator_id"], name: "index_collabs_on_project_id_and_collaborator_id", unique: true
   add_index "collabs", ["project_id"], name: "index_collabs_on_project_id"
+
+  create_table "notes", force: true do |t|
+    t.text     "content"
+    t.integer  "project_id"
+    t.integer  "collaborator_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "notes", ["collaborator_id", "created_at"], name: "index_notes_on_collaborator_id_and_created_at"
+  add_index "notes", ["project_id", "created_at"], name: "index_notes_on_project_id_and_created_at"
 
   create_table "projects", force: true do |t|
     t.integer  "author_id"

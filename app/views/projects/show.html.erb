@@ -17,6 +17,18 @@
 <div class="row"> 
   <div class="span9">  
     <%= render 'board' %>
+    <% if @user == current_user || @is_collaborator %>
+   
+      <h3>Project Notes (<%= @project.notes.count %>)</h3>
+      <% if @project.notes.any? %>
+        
+        <ol class="microposts">
+          <%= render @notes %>
+        </ol>  
+      <% end %>
+      <%= render 'notes/note_form' %>
+   
+  <% end %>  
   </div>
   <div class="span3">
     <h3>Versions (<%= @project.versions.count %>)</h3>
@@ -51,12 +63,17 @@
         </ol>
         
       <% end %>
+
+
   <% end %>  
   <% if @user == current_user %>    
       <%= render 'collaborators/collaborator_form' %>
     
   <% end %>
   </div>
+
+
+
 </div>
 
 

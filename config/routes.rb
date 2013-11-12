@@ -3,6 +3,7 @@ Collaborave::Application.routes.draw do
   resources :versions
   resources :collaborators
   resources :collabs
+  resources :notes
 
   get "tracks/index"
   get "tracks/new"

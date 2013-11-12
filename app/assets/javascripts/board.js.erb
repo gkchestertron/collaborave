@@ -34,6 +34,7 @@ var ctx = [];
 var ctxm, ctxa;
 var ctxt = $("#timeSlider").get()[0].getContext("2d");
 var wavctx = [];
+var focus = false;
 
 
 function loadHash(){
@@ -159,6 +160,12 @@ for (var i=0;i<trackList.length;i++){
 
 //start loading audio
 $(document).ready( function(){
+  $('input').focus(function(){
+    focus = true;
+  });
+  $('input').blur(function(){
+    focus = false;
+  });
   trackBuilder();
 });
 
@@ -706,8 +713,13 @@ $("#timeSlider").mousedown(function(e){
 //play/pause with space bar
 $(window).bind('keydown', function(e){
   if ( e.keyCode != 32) return;
-  e.preventDefault();
-  !playing ? playTrack() : pauseTrack();           
+  
+  if (!focus){
+    e.preventDefault();
+    !playing ? playTrack() : pauseTrack();  
+  }
+  
+           
 });
 
 //fast forward with right arrow
