@@ -19,9 +19,10 @@ Social:
 
 Code:
 * refactor to remove redundancies in recording and playback (should only need one audioContext)
+* add model for controlling upload limit - current loop in controller causes slow loading (set as attribute in database on upload)
 
 Design:
-Make a non-ugly interface... maybe something that looks like a mixer
+* make a non-ugly interface... maybe something that looks like a mixer
 
 Misc:
 * tighten security - I have a lot of pieces to review

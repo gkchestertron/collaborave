@@ -10,10 +10,7 @@ class UsersController < ApplicationController
   def show
 	  @user = User.find(params[:id])
     @projects = @user.projects.paginate(page: params[:page])
-    @total_files_size = 0
-    @user.projects.each do |project| 
-      project.tracks.each {|track| @total_files_size = @total_files_size + track.path.file.size }
-    end
+    
     @collab_projects = @user.collab_projects.paginate(page: params[:page])
 
   end
