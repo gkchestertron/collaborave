@@ -181,7 +181,7 @@ function trackBuilder(){
   //create loop to build track divs, canvases and controls
   for ( var i = 0, l = trackList.length; i < l; i++ ){
     strip_filename = trackList[i].split('/');
-    name = strip_filename[strip_filename.length-1].split('.')[0];
+    name = names_array[i];
     trackDiv = $('<div class="fader" id="track' + i + '"><div><b>' + name + '</b></div>' + 
         '<div><canvas id="trackHigh' + i +'" width="60" height="20"></canvas> high</div>' +
         '<div><canvas id="trackMid' + i +'" width="60" height="20"></canvas> mid</div>' +
