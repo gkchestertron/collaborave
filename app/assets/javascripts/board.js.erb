@@ -82,6 +82,7 @@ function loadTrack(url, i) {
   request.onload = function() {
     context.decodeAudioData(request.response, function(buffer) {
       trackBuffers[i] = buffer;
+      console.log(buffer.getChannelData(0));
       
       //drawBuffer( 500, 200, wavctx[i], trackBuffers[i] );
       //set defaults
