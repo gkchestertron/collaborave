@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131112143422) do
+ActiveRecord::Schema.define(version: 20140110050524) do
 
   create_table "collabs", force: true do |t|
     t.integer  "project_id"
@@ -44,6 +44,15 @@ ActiveRecord::Schema.define(version: 20131112143422) do
   end
 
   add_index "projects", ["author_id", "created_at"], name: "index_projects_on_author_id_and_created_at"
+
+  create_table "regions", force: true do |t|
+    t.integer  "track_id",   null: false
+    t.float    "start_time", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "regions", ["track_id"], name: "index_regions_on_track_id"
 
   create_table "tracks", force: true do |t|
     t.string   "track_name"

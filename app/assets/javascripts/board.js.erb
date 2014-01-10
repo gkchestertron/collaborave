@@ -1,16 +1,13 @@
+
 //get project name
 var project = $("#project_heading").contents().text()
 
-//testing passed variables from ruby
-console.log(names_array);
-
-
 //filter value arrays
-var low_shelf = [];
-var high_shelf = [];
-var peaking = [];
-var panner = [];
-var volume = [];
+// var low_shelf = [];
+// var high_shelf = [];
+// var peaking = [];
+// var panner = [];
+// var volume = [];
 var trackMeter = [];
 var master = 1; 
 
@@ -28,6 +25,7 @@ var muted = [];
 var solos = [];
 var settings =[];
 var goodHash = false;
+
 //declare context variables for canvases
 var ctx = [];
 var ctxm, ctxa;
@@ -130,19 +128,22 @@ function loadTrack(url, i) {
 masterTrack = context.createGain();
 masterTrack.gain.value = master;
 mainMeter = context.createAnalyser();
-  mainMeter.smoothingTimeConstant = 0.5;
-  mainMeter.fftSize = 32;
+mainMeter.smoothingTimeConstant = 0.5;
+mainMeter.fftSize = 32;
+
 mainMeter2 = context.createAnalyser();
-  mainMeter.smoothingTimeConstant = 0.5;
-  mainMeter.fftSize = 32;  
+mainMeter.smoothingTimeConstant = 0.5;
+mainMeter.fftSize = 32;  
+
 analyzer = context.createAnalyser();
-  analyzer.smoothingTimeConstant = 0.5;
-  analyzer.fftsize = 32;  
+analyzer.smoothingTimeConstant = 0.5;
+analyzer.fftsize = 32;  
+
 mainSplitter = context.createChannelSplitter();  
 
 //main connections  
 mainMeterNode = context.createScriptProcessor(2048, 1, 1);  
-  mainMeterNode.connect(context.destination);
+mainMeterNode.connect(context.destination);
 masterTrack.connect(mainSplitter);
 mainSplitter.connect(mainMeter,0,0);
 mainSplitter.connect(mainMeter2,1,0);
@@ -556,35 +557,35 @@ function playTrack() {
   for ( var i = 0, l = trackList.length; i < l; i++ ){
     
 
-    //create source
-    source[i] = context.createBufferSource(); 
-    source[i].buffer = trackBuffers[i];   
+    // //create source
+    // source[i] = context.createBufferSource(); 
+    // source[i].buffer = trackBuffers[i];   
 
-    //declare filters
-    low_shelf[i].filter = context.createBiquadFilter();
-      low_shelf[i].filter.type = "lowshelf"; 
-      low_shelf[i].filter.frequency.value = low_shelf[i].freq;
-      low_shelf[i].filter.gain.value = low_shelf[i].gain; 
+    // //declare filters
+    // low_shelf[i].filter = context.createBiquadFilter();
+    //   low_shelf[i].filter.type = "lowshelf"; 
+    //   low_shelf[i].filter.frequency.value = low_shelf[i].freq;
+    //   low_shelf[i].filter.gain.value = low_shelf[i].gain; 
 
-    high_shelf[i].filter = context.createBiquadFilter();
-      high_shelf[i].filter.type = "highshelf"; 
-      high_shelf[i].filter.frequency.value = high_shelf[i].freq;
-      high_shelf[i].filter.gain.value = high_shelf[i].gain;   
+    // high_shelf[i].filter = context.createBiquadFilter();
+    //   high_shelf[i].filter.type = "highshelf"; 
+    //   high_shelf[i].filter.frequency.value = high_shelf[i].freq;
+    //   high_shelf[i].filter.gain.value = high_shelf[i].gain;   
 
-    peaking[i].filter = context.createBiquadFilter();
-      peaking[i].filter.type = "peaking"; 
-      peaking[i].filter.frequency.value = peaking[i].freq;
-      peaking[i].filter.Q.value = peaking[i].Q;
-      peaking[i].filter.gain.value = peaking[i].gain;     
+    // peaking[i].filter = context.createBiquadFilter();
+    //   peaking[i].filter.type = "peaking"; 
+    //   peaking[i].filter.frequency.value = peaking[i].freq;
+    //   peaking[i].filter.Q.value = peaking[i].Q;
+    //   peaking[i].filter.gain.value = peaking[i].gain;     
 
-    panner[i].filter = context.createPanner();
-      panner[i].filter.setPosition(panner[i].position[0],panner[i].position[1],panner[i].position[2]);    
-      panner[i].filter.panningModel = "equalpower";
+    // panner[i].filter = context.createPanner();
+    //   panner[i].filter.setPosition(panner[i].position[0],panner[i].position[1],panner[i].position[2]);    
+    //   panner[i].filter.panningModel = "equalpower";
 
-    volume[i].filter = context.createGain();
-      if (muted[i] == false) volume[i].filter.gain.value = volume[i].gain;  
-      if (muted[i] == true) volume[i].filter.gain.value = 0;
-      if (soloing == true && solos[i] == false) volume[i].filter.gain.value = 0;
+    // volume[i].filter = context.createGain();
+    //   if (muted[i] == false) volume[i].filter.gain.value = volume[i].gain;  
+    //   if (muted[i] == true) volume[i].filter.gain.value = 0;
+    //   if (soloing == true && solos[i] == false) volume[i].filter.gain.value = 0;
 
 
     

@@ -29,6 +29,7 @@ module Collaborave
     config.assets.precompile += [
       'board.js', 'AudioContextMonkeyPatch.js', 'audiodisplay.js', 'main.js', 'recorder.js', 'recorderWorker.js'
     ]
+    config.assets.paths << 'app/assets/templates'
   end
 end
 

@@ -1,6 +1,8 @@
 class TracksController < ApplicationController
   def index
-    @tracks = Track.all
+    @project = Project.find(params[:project_id])
+    @tracks = @project.tracks
+    render json: @tracks 
   end
 
   def new
@@ -25,8 +27,13 @@ class TracksController < ApplicationController
     redirect_to @project , notice:  "The track \"#{@track.track_name}\" has been deleted."
   end
 
+  def show
+    @track = Track.find(params[:id])
+    render json: @track
+  end
+
 private
   def track_params
-    params.require(:track).permit(:track_name, :path, :project_id)
+    params.permit(:track).permit(:track_name, :path, :project_id)
   end
 end

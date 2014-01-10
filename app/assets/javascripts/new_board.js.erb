@@ -1,0 +1,70 @@
+(function (root) {
+  var Board = root.Board = (root.Board || {});
+
+  
+  // give tracks multiple regions that are connected to individual files - modularize!!!!!
+  // move filters into track instead of region - keep values in hash
+  var Track = Board.Track = function () {
+		var regions = [];
+  }
+
+  var Region = Track.Region = function (buffer) {
+    var that = this;
+    that.buffer = buffer;
+
+    that.high_shelf = context.createBiquadFilter();
+      that.high_shelf.type = "highshelf"; 
+      that.high_shelf.frequency.value = 7000;
+      that.high_shelf.gain.value = 0; 
+
+    that.mid = context.createBiquadFilter();
+      that.mid.type = "peaking"; 
+      that.mid.frequency.value = 3500;
+      that.mid.Q.value = 0.9;
+      that.mid.gain.value = 0;  
+
+    that.low_shelf = context.createBiquadFilter();
+      that.low_shelf.type = "lowshelf"; 
+      that.low_shelf.frequency.value = 440;
+      that.low_shelf.gain.value = 0;   
+    
+    that.pan = context.createPanner();
+      that.pan.setPosition(0,0,0.1);    
+      that.pan.panningModel = "equalpower";
+
+    that.gain = context.createGain();
+      if (muted[i] == false) that.gain.gain.value = 1;  
+      if (muted[i] == true) that.gain.gain.value = 0;
+      if (soloing == true && solos[i] == false) that.gain.gain.value = 0;
+
+    that.muted = false; 
+    that.soloed = false;
+
+    //still need to make connections and have a playback function
+    //will depend on proper implementation - see web audio documentation - 
+    //I think that sources/connections (and maybe filters) need to be rebuilt on every playback
+    //should probably move that out and just leave the rebuilding of the source in the play function
+    that.play = function () {
+      var source = context.createBufferSource(); 
+      source.buffer = that.buffer; 
+
+      source.connect(that.low_shelf);
+      that.low_shelf.connect(that.mid);
+      that.mid.connect(that.high_shelf);
+      that.high_shelf.connect(that.pan);
+      that.pan.connect(that.gain);
+      //still need to implement the track meter
+      //that.gain.connect(that.meter); 
+      //how do I access the master track?
+      that.gain.connect(master);
+
+      //setup offset/transport/start-time here
+      source.start
+
+    }  
+  }
+
+
+ })(this);
+
+      

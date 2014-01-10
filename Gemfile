@@ -10,6 +10,8 @@ gem 'bootstrap-will_paginate', '0.0.9'
 gem 'carrierwave', '~> 0.9'
 gem 'rails_12factor'
 gem 'carrierwave-ftp', :require => 'carrierwave/storage/ftp' # FTP only
+gem 'backbone-on-rails'
+gem 'ejs'
 
 group :development, :test do
   gem 'sqlite3', '1.3.8'

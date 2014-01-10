@@ -27,3 +27,11 @@ Design:
 Misc:
 * tighten security - I have a lot of pieces to review
 * add emails to login procedure
+
+//snippets - including audio stuff
+//put back in (or use tree to include)
+<%= javascript_include_tag "AudioContextMonkeyPatch" %>
+<%= javascript_include_tag "audiodisplay" %>
+<%= javascript_include_tag "recorder" %>
+<%= javascript_include_tag "main" %>
+<%= javascript_include_tag "board" %>
