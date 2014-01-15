@@ -18,33 +18,35 @@ class ProjectsController < ApplicationController
     	redirect_to root_url, notice:  "The project \"#{@project.name}\" has been deleted."
 	end
 
-	def show
-		
-		
+  def index
+    render json: current_user.projects.to_json(include: :tracks)        
+  end
 
-    	@project = Project.find(params[:id])
-    	@user = @project.author
-    	@version = Version.new
-    	
-    	@versions = @project.versions.paginate(page: params[:page])
-    	@track = @project.tracks.new
-    	@track.project_id = @project.id
-    	@tracks = @project.tracks.all
-    	@track_urls = []
-    	@track_names = []
-    	
-    	@tracks.each  do |track| 
-    		@track_urls << track.path.url if track.path.url != nil
-    		@track_names << track.track_name if track.path.url != nil
-    	end
+  def show
+  	@project = Project.find(params[:id])
+    render json: @project.to_json(include: :tracks)
+  	# @user = @project.author
+  	# @version = Version.new
+  	
+  	# @versions = @project.versions.paginate(page: params[:page])
+  	# @track = @project.tracks.new
+  	# @track.project_id = @project.id
+  	# @tracks = @project.tracks.all
+  	# @track_urls = []
+  	# @track_names = []
+  	
+  	# @tracks.each  do |track| 
+  	# 	@track_urls << track.path.url if track.path.url != nil
+  	# 	@track_names << track.track_name if track.path.url != nil
+  	# end
 
-    	@collaborator = @project.collabs.new
-    	@collaborators = @project.collaborators
-    	@is_collaborator = false
-    	@collaborators.each {|collaborator| @is_collaborator = true if collaborator == current_user }
-    	@note = Note.new
-    	@notes = @project.notes.paginate(page: params[:page])
-  	end
+  	# @collaborator = @project.collabs.new
+  	# @collaborators = @project.collaborators
+  	# @is_collaborator = false
+  	# @collaborators.each {|collaborator| @is_collaborator = true if collaborator == current_user }
+  	# @note = Note.new
+  	# @notes = @project.notes.paginate(page: params[:page])
+	end
 
 
 	private

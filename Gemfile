@@ -13,6 +13,7 @@ gem 'carrierwave-ftp', :require => 'carrierwave/storage/ftp' # FTP only
 gem 'backbone-on-rails'
 gem 'ejs'
 
+
 group :development, :test do
   gem 'sqlite3', '1.3.8'
   gem 'rspec-rails', '2.13.1'

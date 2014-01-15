@@ -4,7 +4,8 @@ window.Collaborave = {
   Views: {},
   Routers: {},
   initialize: function() {
-    alert('Hello from Backbone!');
+    new Collaborave.Routers.Router();
+		Backbone.history.start();
   }
 };
 

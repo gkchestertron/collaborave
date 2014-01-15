@@ -29,11 +29,11 @@ class TracksController < ApplicationController
 
   def show
     @track = Track.find(params[:id])
-    render json: @track
+    render json: @track.to_json(include: :regions)
   end
 
 private
   def track_params
-    params.permit(:track).permit(:track_name, :path, :project_id)
+    params.require(:track).permit(:track_name, :path, :project_id)
   end
 end

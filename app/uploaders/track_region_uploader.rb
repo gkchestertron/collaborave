@@ -10,7 +10,7 @@ CarrierWave.configure do |config|
   config.ftp_passive = true # false by default
 end
 
-class TrackFileUploader < CarrierWave::Uploader::Base
+class TrackRegionUploader < CarrierWave::Uploader::Base
 
 
 

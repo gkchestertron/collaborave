@@ -1,7 +1,9 @@
-Collaborave.Collections.Tracks = Backbone.Collection.extend({
-	initialize: function (options) {
-		this.project = options.project
+Collaborave.Collections.ProjectTracks = Backbone.Collection.extend({
+	initialize: function (models, options) {
+		this.project = options.project;
 	},
 	model: Collaborave.Models.Track,
-	url: '/projects/' + this.project.id + '/tracks'
+	url: function () { 
+		return "/projects/" + this.project.id + "/tracks"
+	}
 });
