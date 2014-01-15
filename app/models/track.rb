@@ -1,6 +1,7 @@
 class Track < ActiveRecord::Base
-	belongs_to :version, class_name: "Version"
-	validates :track_name, presence: true
-	has_many :regions
+	belongs_to :project
+	validates :name, presence: true
+	has_many :regions, dependent: :destroy
+	has_many :filters, dependent: :destroy
 
 end

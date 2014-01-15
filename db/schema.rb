@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140115174604) do
+ActiveRecord::Schema.define(version: 20140115200337) do
 
   create_table "collabs", force: true do |t|
     t.integer  "project_id"
@@ -24,6 +24,23 @@ ActiveRecord::Schema.define(version: 20140115174604) do
   add_index "collabs", ["collaborator_id"], name: "index_collabs_on_collaborator_id"
   add_index "collabs", ["project_id", "collaborator_id"], name: "index_collabs_on_project_id_and_collaborator_id", unique: true
   add_index "collabs", ["project_id"], name: "index_collabs_on_project_id"
+
+  create_table "filters", force: true do |t|
+    t.string   "name"
+    t.integer  "track_id"
+    t.string   "settings"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "track_diff_id"
+    t.integer  "region_id"
+    t.integer  "region_diff_id"
+    t.integer  "signal_path_order"
+  end
+
+  add_index "filters", ["region_diff_id"], name: "index_filters_on_region_diff_id"
+  add_index "filters", ["region_id"], name: "index_filters_on_region_id"
+  add_index "filters", ["track_diff_id"], name: "index_filters_on_track_diff_id"
+  add_index "filters", ["track_id"], name: "index_filters_on_track_id"
 
   create_table "notes", force: true do |t|
     t.text     "content"
@@ -45,21 +62,42 @@ ActiveRecord::Schema.define(version: 20140115174604) do
 
   add_index "projects", ["author_id", "created_at"], name: "index_projects_on_author_id_and_created_at"
 
-  create_table "regions", force: true do |t|
-    t.integer  "track_id",   null: false
-    t.float    "start_time", null: false
+  create_table "region_diffs", force: true do |t|
+    t.integer  "track_diff_id", null: false
+    t.integer  "region_id",     null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  add_index "region_diffs", ["track_diff_id"], name: "index_region_diffs_on_track_diff_id"
+
+  create_table "regions", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "path"
+    t.float    "start_time"
+    t.integer  "track_id"
   end
 
   add_index "regions", ["track_id"], name: "index_regions_on_track_id"
 
-  create_table "tracks", force: true do |t|
-    t.string   "track_name"
-    t.integer  "project_id"
+  create_table "track_diffs", force: true do |t|
+    t.integer  "track_id",   null: false
+    t.integer  "version_id", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "track_diffs", ["version_id"], name: "index_track_diffs_on_version_id"
+
+  create_table "tracks", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "name"
+    t.integer  "project_id"
+  end
+
+  add_index "tracks", ["project_id"], name: "index_tracks_on_project_id"
 
   create_table "users", force: true do |t|
     t.string   "name"

@@ -1,14 +1,20 @@
 Collaborave::Application.routes.draw do
   resources :projects do
+    resources :versions, only: [:index]
+    resources :notes
+    resources :collabs
+  end
+
+  resources :versions, except: [:index] do
     resources :tracks, only: [:index]
   end
+
   resources :tracks, except: [:index] do
     resources :regions, only: [:index]
   end
+
   resources :regions, except: [:index]
-  resources :notes
-  resources :versions
-  resources :collabs
+  
 
   resources :users
   resources :sessions, only: [:new, :create, :destroy]
