@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140115200337) do
+ActiveRecord::Schema.define(version: 20140115223417) do
 
   create_table "collabs", force: true do |t|
     t.integer  "project_id"
@@ -25,6 +25,16 @@ ActiveRecord::Schema.define(version: 20140115200337) do
   add_index "collabs", ["project_id", "collaborator_id"], name: "index_collabs_on_project_id_and_collaborator_id", unique: true
   add_index "collabs", ["project_id"], name: "index_collabs_on_project_id"
 
+  create_table "filter_automations", force: true do |t|
+    t.string   "method_name"
+    t.string   "args"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "filter_id"
+  end
+
+  add_index "filter_automations", ["filter_id"], name: "index_filter_automations_on_filter_id"
+
   create_table "filters", force: true do |t|
     t.string   "name"
     t.integer  "track_id"
@@ -32,9 +42,10 @@ ActiveRecord::Schema.define(version: 20140115200337) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "track_diff_id"
+    t.integer  "signal_path_order"
+    t.string   "filter_type"
     t.integer  "region_id"
     t.integer  "region_diff_id"
-    t.integer  "signal_path_order"
   end
 
   add_index "filters", ["region_diff_id"], name: "index_filters_on_region_diff_id"
@@ -67,6 +78,7 @@ ActiveRecord::Schema.define(version: 20140115200337) do
     t.integer  "region_id",     null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.float    "start_time"
   end
 
   add_index "region_diffs", ["track_diff_id"], name: "index_region_diffs_on_track_diff_id"

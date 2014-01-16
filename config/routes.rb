@@ -1,5 +1,5 @@
 Collaborave::Application.routes.draw do
-  resources :projects do
+  resources :projects, defaults: {format: :json} do
     resources :versions, only: [:index]
     resources :notes
     resources :collabs
@@ -9,8 +9,9 @@ Collaborave::Application.routes.draw do
     resources :tracks, only: [:index]
   end
 
-  resources :tracks, except: [:index] do
+  resources :tracks, except: [:index], defaults: {format: :json} do
     resources :regions, only: [:index]
+    resources :filters, only: [:index]
   end
 
   resources :regions, except: [:index]
@@ -18,7 +19,6 @@ Collaborave::Application.routes.draw do
 
   resources :users
   resources :sessions, only: [:new, :create, :destroy]
-  resources :projects
   root 'static_pages#home'
   match 'signup', to: 'users#new', via: 'get'
   match '/signin',  to: 'sessions#new',         via: 'get'

@@ -1,4 +1,4 @@
-Collaborave.Collections.ProjectTracks = Backbone.Collection.extend({
+Collaborave.Collections.Tracks = Backbone.Collection.extend({
 	initialize: function (models, options) {
 		this.project = options.project;
 	},
