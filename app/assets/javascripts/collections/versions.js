@@ -1,9 +1,9 @@
 Collaborave.Collections.Versions = Backbone.Collection.extend({
 	initialize: function (models, options) {
-		this.parent_id = options.parent_id;
+		this.parent = options.parent;
 	},
 	model: Collaborave.Models.Version,
   url: function () { 
-  	return '/projects/' + this.parent_id + '/versions'
+  	return '/projects/' + this.parent.id + '/versions'
 	}
 })

@@ -2,7 +2,6 @@ class TracksController < ApplicationController
   def index
     @project = Project.find(params[:project_id])
     @tracks = @project.tracks
-    render json: @tracks 
   end
 
   def new
@@ -12,7 +11,6 @@ class TracksController < ApplicationController
   def create
     @track = Track.new(track_params)
     @project = @track.project
-
     if @track.save
       redirect_to @project, notice: "The track \"#{@track.track_name}\" has been uploaded."
     else
@@ -29,7 +27,6 @@ class TracksController < ApplicationController
 
   def show
     @track = Track.find(params[:id])
-    render json: @track.to_json(include: :regions)
   end
 
 private

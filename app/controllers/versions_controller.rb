@@ -17,6 +17,15 @@ class VersionsController < ApplicationController
     redirect_to @project , notice:  "The version \"#{@version.name}\" has been deleted."
   end
 
+  def index
+    @project = Project.find(params[:project_id])
+    @versions = @project.versions
+  end
+
+  def show
+    @version = Version.find(params[:id])
+  end
+
   private
 
   	def version_params

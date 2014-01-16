@@ -4,6 +4,6 @@ Collaborave.Collections.Regions = Backbone.Collection.extend({
 	},
 	model: Collaborave.Models.Region,
 	url: function () {
-		return '/tracks/' + this.track.id + '/regions'
+		return '/tracks/' + this.track.get('id') + '/regions'
 	}
 });

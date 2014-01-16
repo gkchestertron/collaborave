@@ -3,10 +3,21 @@ Collaborave::Application.routes.draw do
     resources :versions, only: [:index]
     resources :notes
     resources :collabs
+    resources :tracks, only: [:index]
   end
 
+
   resources :versions, except: [:index] do
-    resources :tracks, only: [:index]
+    resources :track_diffs, only: [:index]
+  end
+
+  resources :track_diffs, except: [:index] do 
+    resources :filters, only: [:index]
+    resources :region_diffs, only: [:index]
+  end
+
+  resources :region_diffs, except: [:index] do
+    resources :filters, only: [:index]
   end
 
   resources :tracks, except: [:index], defaults: {format: :json} do
@@ -14,7 +25,15 @@ Collaborave::Application.routes.draw do
     resources :filters, only: [:index]
   end
 
-  resources :regions, except: [:index]
+  resources :regions, except: [:index], defaults: {format: :json} do
+    resources :filters, only: [:index]
+  end
+
+  resources :filters, except: [:index] do 
+    resources :filter_automations, only: [:index]
+  end 
+
+  resources :filter_automations, except: [:index]
   
 
   resources :users

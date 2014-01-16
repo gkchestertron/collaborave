@@ -1,7 +1,7 @@
 Collaborave.Collections.RegionDiffs = Backbone.Collection.extend({
 	initialize: function (models, options) {
-		this.parent_id = options.parent_id;
+		this.parent = options.parent;
 	},
 	model: Collaborave.Models.RegionDiff,
-	url: '/track_diffs/' + this.parent_id + 'region_diffs' 
+	url: '/track_diffs/' + this.parentid + 'region_diffs' 
 })
