@@ -14,5 +14,20 @@ Collaborave.Models.Track = Backbone.Model.extend({
 			attrs.filters = attrs.filters.toJSON();
 		};
 		return attrs;
+	},
+	load: function () {
+		this.get('regions').each(function (region) {
+			region.load();
+		});
+	},
+	play: function () {
+		this.get('regions').each(function (region) {
+			region.play();
+		});
+	},
+	stop: function () {
+		this.get('regions').each(function (region) {
+			region.stop();
+		});
 	}
 });
