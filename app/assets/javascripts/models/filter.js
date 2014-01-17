@@ -9,7 +9,6 @@ Collaborave.Models.Filter = Backbone.Model.extend({
 	toJSON: function () {
 		var attrs = _.clone(this.attributes);
 		if (attrs.filter_automations) {
-			console.log("logging: " + attrs.filter_automations)
 			attrs.filter_automations = attrs.filter_automations.toJSON();
 		};
 		return attrs;

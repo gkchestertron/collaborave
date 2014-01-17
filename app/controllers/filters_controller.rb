@@ -2,7 +2,6 @@ class FiltersController < ApplicationController
 	def create
 		@filter = Filter.new(filter_params)
 
-
 		if @filter.save
 			if params[:filter_automations] 
 				params[:filter_automations].each do |filter_automation|

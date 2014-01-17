@@ -12,9 +12,26 @@ class TracksController < ApplicationController
     @track = Track.new(track_params)
     @project = @track.project
     if @track.save
-      redirect_to @project, notice: "The track \"#{@track.track_name}\" has been uploaded."
+      if params[:filters]
+        params[:filters].each do |filter|
+          filter_automations = filter[:filter_automations]
+          filter.delete(:filter_automations)
+          new_filter = @track.filters.new(filter)
+          new_filter.track_id = @track.id
+          if new_filter.save
+            if filter_automations 
+              filter_automations.each do |filter_automation|
+                new_filter_automation = new_filter.filter_automations.new(filter_automation)
+                new_filter_automation.filter_id = new_filter.id
+                new_filter_automation.save
+              end
+            end
+          end
+        end
+      end
+      render json: @track
     else
-      redirect_to @project, notice: "The track did not save."
+      render json: @track.errors.full_messages, status: 422
     end
   end
 
@@ -31,6 +48,6 @@ class TracksController < ApplicationController
 
 private
   def track_params
-    params.require(:track).permit(:track_name, :path, :project_id)
+    params.require(:track).permit(:name, :project_id)
   end
 end
