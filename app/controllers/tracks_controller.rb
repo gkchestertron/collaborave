@@ -10,7 +10,6 @@ class TracksController < ApplicationController
 
   def create
     @track = Track.new(track_params)
-    @project = @track.project
     if @track.save
       if params[:filters]
         params[:filters].each do |filter|
@@ -29,7 +28,7 @@ class TracksController < ApplicationController
           end
         end
       end
-      render json: @track
+      render :show
     else
       render json: @track.errors.full_messages, status: 422
     end
@@ -38,12 +37,36 @@ class TracksController < ApplicationController
   def destroy
     @track = Track.find(params[:id])
     @track.destroy
-    @project = @track.project
-    redirect_to @project , notice:  "The track \"#{@track.track_name}\" has been deleted."
+    head :ok
   end
 
   def show
     @track = Track.find(params[:id])
+  end
+
+  def update
+    @track = Track.find(params[:id])
+    if @track.update_attributes(track_params)
+      if params[:filters]
+        params[:filters].each do |filter|
+          update_filter = Filter.find(filter[:id])
+          filter_automations = filter[:filter_automations]
+          filter.delete(:filter_automations)
+          if update_filter.update_attributes(filter)
+            if filter_automations 
+              filter_automations.each do |filter_automation|
+                update_filter_automation = update_filter.filter_automations.find(filter_automation[:id])
+                update_filter_automation.filter_id = update_filter.id
+                update_filter_automation.save
+              end
+            end
+          end
+        end
+      end
+      render :show
+    else
+      render json: @track.errors.full_messages, status: 422
+    end
   end
 
 private
