@@ -27,7 +27,7 @@ Collaborave.Models.Region = Backbone.Model.extend({
 		region.source = context.createBufferSource();
 		region.source.buffer = region.buffer;
 		region.source.connect(track_node);
-		region.source.start(0);
+		region.source.start(context.currentTime + parseInt(region.get('start_time')) || 0);
 	},
 	stop: function () {
 		var region = this;
