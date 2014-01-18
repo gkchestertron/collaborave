@@ -1,4 +1,39 @@
 Collaborave.Models.Track = Backbone.Model.extend({
+	initialize: function () {
+		this.setup_default_filters();
+		this.signal_path = [];
+		this.create_signal_path();
+	},
+	create_signal_path: function () {
+		var track = this;
+
+		//create array of audio context nodes
+		track.get('filters').each(function (filter) {
+			var filter_type = filter.get('filter_type');
+			var settings = JSON.parse(filter.get('settings'));
+			console.log(settings)
+			var name = filter.get('name');
+			var filter = context[filter_type]();
+			filter.name = name
+			_.each(settings, function (val, key) {
+
+				if (typeof val === 'object') {
+					_.each(val, function (val1, key1) {
+						filter[key][key1] = val1;
+					});
+				} else {
+					filter[key] = val;
+				}
+			});
+			track.signal_path.push(filter);	
+		});
+
+		//connect filters
+		for (var i = 1; i < this.signal_path.length; i++) {
+			this.signal_path[i-1].connect(this.signal_path[i]);
+		}
+		track.signal_path[track.signal_path.length - 1].connect(context.destination);
+	},
 	urlRoot: '/tracks',
 	parse: function (data) {
 		var that = this;
@@ -21,13 +56,56 @@ Collaborave.Models.Track = Backbone.Model.extend({
 		});
 	},
 	play: function () {
+		var track = this;
 		this.get('regions').each(function (region) {
-			region.play();
+			region.play(track.signal_path[0]);
 		});
 	},
 	stop: function () {
 		this.get('regions').each(function (region) {
 			region.stop();
+		});
+	},
+	setup_default_filters: function () {
+		var track = this;
+		
+		var volume = new Collaborave.Models.Filter({
+			name: 'volume',
+			filter_type: 'createGain',
+			settings: JSON.stringify({gain: { value: 0.5 }})
+		});	
+		this.set('filters', new Collaborave.Collections.Filters(volume, {parent: track}));
+		this.get('filters').add({
+			name: 'highs',
+			filter_type: 'createBiquadFilter',
+			settings: JSON.stringify({type: "highshelf", frequency: { value: 7000 }, gain: { value: 0 }})
+		});
+		this.get('filters').add({
+			name: 'mids',
+			filter_type: 'createBiquadFilter',
+			settings: JSON.stringify({type: 'peaking', frequency: { value: 3500 }, Q: { value: 0.9 }, gain: { value: 0 }})
+		});
+		this.get('filters').add({
+			name: 'lows',
+			filter_type: 'createBiquadFilter',
+			settings: JSON.stringify({type: 'lowshelf', frequency: { value: 440 }, gain: { value: 0 }})
+		});
+	//add panner later - may need to get fancy and add a functions parameter to call functions on 
+	//generated nodes
+	},
+	set_filter: function(name, settings) {
+		var track = this;
+		filter = _.find(track.signal_path, function (obj) {return obj.name == name});
+		_.each(settings, function (val, key) {
+			
+			if (typeof val === 'object') {
+				_.each(val, function (val1, key1) {
+					filter[key][key1] = val1;
+				});
+			} else {
+				filter[key] = val;
+			}
+			console.log(filter)
 		});
 	}
 });

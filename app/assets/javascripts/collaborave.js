@@ -1,3 +1,6 @@
+window.AudioContext = window.AudioContext||window.webkitAudioContext;
+context = new AudioContext();
+
 window.Collaborave = {
   Models: {},
   Collections: {},

@@ -14,9 +14,8 @@ class ProjectsController < ApplicationController
 
 	def destroy
 		@project = Project.find(params[:id])
-    	@project.destroy
-    	@user = @project.author
-    	redirect_to root_url, notice:  "The project \"#{@project.name}\" has been deleted."
+    @project.destroy
+    head :ok
 	end
 
   def index
