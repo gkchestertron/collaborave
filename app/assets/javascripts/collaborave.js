@@ -1,5 +1,7 @@
 window.AudioContext = window.AudioContext||window.webkitAudioContext;
 context = new AudioContext();
+context.position = 0;
+context.postition_diff = 0;
 
 window.Collaborave = {
   Models: {},

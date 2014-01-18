@@ -13,12 +13,27 @@ Collaborave.Models.Project = Backbone.Model.extend({
 			track.load();
 		});
 	},
+	pause: function () {
+		if (context.playing) {
+			context.playing = false;
+			context.position += (context.currentTime - context.position_diff);
+			this.get('tracks').each(function (track) {
+				track.stop();
+			});
+		}
+	},
 	play: function () {
-		this.get('tracks').each(function (track) {
-			track.play();
-		});
+		if (!context.playing) {	
+			context.playing = true;
+			context.position_diff = context.currentTime;
+			this.get('tracks').each(function (track) {
+				track.play();
+			});
+		}
 	},
 	stop: function () {
+		context.playing = false;
+		context.position = 0;
 		this.get('tracks').each(function (track) {
 			track.stop();
 		});

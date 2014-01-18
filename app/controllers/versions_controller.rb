@@ -211,4 +211,3 @@ class VersionsController < ApplicationController
     	params.require(:version).permit(:name, :collaborator_id, :project_id)
   	end
 end
-

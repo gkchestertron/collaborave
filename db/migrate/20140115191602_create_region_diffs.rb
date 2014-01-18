@@ -6,7 +6,6 @@ class CreateRegionDiffs < ActiveRecord::Migration
 
       t.timestamps
     end
-    drop_table :region_settings
     add_column :regions, :start_time, :float 
   	add_index :region_diffs, :track_diff_id
   end

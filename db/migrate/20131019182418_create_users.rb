@@ -6,5 +6,12 @@ class CreateUsers < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    create_table :regions do |t|
+    	t.decimal :start_time
+    	t.integer :track_id
+
+    	t.timestamps
+    end
   end
 end

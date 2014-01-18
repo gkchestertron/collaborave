@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140118015250) do
+ActiveRecord::Schema.define(version: 20140118035539) do
 
   create_table "collabs", force: true do |t|
     t.integer  "project_id"
@@ -36,14 +36,14 @@ ActiveRecord::Schema.define(version: 20140118015250) do
   add_index "filter_automations", ["filter_id"], name: "index_filter_automations_on_filter_id"
 
   create_table "filters", force: true do |t|
-    t.string   "name"
+    t.string   "name",              null: false
     t.integer  "track_id"
     t.string   "settings"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "track_diff_id"
     t.integer  "signal_path_order"
-    t.string   "filter_type"
+    t.string   "filter_type",       null: false
     t.integer  "region_id"
     t.integer  "region_diff_id"
   end
@@ -65,8 +65,8 @@ ActiveRecord::Schema.define(version: 20140118015250) do
   add_index "notes", ["project_id", "created_at"], name: "index_notes_on_project_id_and_created_at"
 
   create_table "projects", force: true do |t|
-    t.integer  "author_id"
-    t.string   "name"
+    t.integer  "author_id",  null: false
+    t.string   "name",       null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -74,11 +74,11 @@ ActiveRecord::Schema.define(version: 20140118015250) do
   add_index "projects", ["author_id", "created_at"], name: "index_projects_on_author_id_and_created_at"
 
   create_table "region_diffs", force: true do |t|
-    t.integer  "track_diff_id", null: false
-    t.integer  "region_id",     null: false
+    t.integer  "track_diff_id",               null: false
+    t.integer  "region_id",                   null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.float    "start_time"
+    t.decimal  "start_time",    default: 0.0, null: false
   end
 
   add_index "region_diffs", ["track_diff_id"], name: "index_region_diffs_on_track_diff_id"
@@ -86,9 +86,9 @@ ActiveRecord::Schema.define(version: 20140118015250) do
   create_table "regions", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "path"
-    t.decimal  "start_time"
-    t.integer  "track_id"
+    t.string   "path",                     null: false
+    t.decimal  "start_time", default: 0.0, null: false
+    t.integer  "track_id",                 null: false
   end
 
   add_index "regions", ["track_id"], name: "index_regions_on_track_id"
@@ -105,8 +105,8 @@ ActiveRecord::Schema.define(version: 20140118015250) do
   create_table "tracks", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "name"
-    t.integer  "project_id"
+    t.string   "name",       null: false
+    t.integer  "project_id", null: false
   end
 
   add_index "tracks", ["project_id"], name: "index_tracks_on_project_id"
@@ -125,9 +125,9 @@ ActiveRecord::Schema.define(version: 20140118015250) do
   add_index "users", ["remember_token"], name: "index_users_on_remember_token"
 
   create_table "versions", force: true do |t|
-    t.integer  "project_id"
-    t.integer  "collaborator_id"
-    t.string   "name"
+    t.integer  "project_id",      null: false
+    t.integer  "collaborator_id", null: false
+    t.string   "name",            null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

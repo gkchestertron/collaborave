@@ -1,0 +1,29 @@
+<div id="analyzeThis">
+    <h2 id="loading">Loading (this may take a minute)...</h2>
+    <h2>Press spacebar to stop/start. Use Arrow keys for ff/rew.</h2>
+    <div>
+      <h1 id="timer">00:00.00</h1> 
+      <canvas id="timeSlider" width="600" height="10" style="display: block;"></canvas>
+    </div>
+    <button class="btn btn-danger" id="stop">stop</button>
+    <button class="btn btn-primary" id="pause">pause</button>
+    <button class="btn btn-success" id="play">play</button>
+  </div>
+
+  <div id="mixer"></div>
+
+  <script>
+  	$(function () {
+	  	var p = new Collaborave.Models.Project({id: 2});
+	  	p.fetch({
+	  		success: function () {
+	  			p.load();
+	  		}
+	  	});
+	  	
+
+	  	$('#stop').on('click', p.stop.bind(p));
+	  	$('#pause').on('click', p.pause.bind(p));
+	  	$('#play').on('click', p.play.bind(p));	  	
+	  });
+  </script>
