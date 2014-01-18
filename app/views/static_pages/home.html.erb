@@ -8,6 +8,9 @@
     <button class="btn btn-danger" id="stop">stop</button>
     <button class="btn btn-primary" id="pause">pause</button>
     <button class="btn btn-success" id="play">play</button>
+    <button class="btn btn-default" id="rewind">rewind</button>
+    <button class="btn btn-default" id="fast-forward">fast forward</button>
+
   </div>
 
   <div id="mixer"></div>
@@ -24,6 +27,8 @@
 
 	  	$('#stop').on('click', p.stop.bind(p));
 	  	$('#pause').on('click', p.pause.bind(p));
-	  	$('#play').on('click', p.play.bind(p));	  	
+	  	$('#play').on('click', p.play.bind(p));	
+	  	$('#rewind').on('click', p.rewind.bind(p));	
+	  	$('#fast-forward').on('click', p.fastForward.bind(p));	  	
 	  });
   </script>

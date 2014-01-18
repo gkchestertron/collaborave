@@ -17,6 +17,10 @@ Collaborave.Models.Region = Backbone.Model.extend({
 	  // Decode asynchronously
 	  request.onload = function() {
 	    context.decodeAudioData(request.response, function(buffer) {
+	    	//set project duration (eventually will need to adjust for non-full-length regions)
+	    	if (context.duration < buffer.duration) {
+	        context.duration = buffer.duration;
+	      }
 	      region.buffer = buffer;
 	    });
 	  }
