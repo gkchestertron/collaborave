@@ -64,10 +64,10 @@ class RegionsController < ApplicationController
       render json: @region.errors.full_messages, status: 422
     end
   end
-end
 
-private
-  def region_params
-    params.require(:region).permit(:name, :project_id, :start_time)
-  end
+
+  private
+    def region_params
+      params.require(:region).permit(:name, :project_id, :start_time)
+    end
 end
