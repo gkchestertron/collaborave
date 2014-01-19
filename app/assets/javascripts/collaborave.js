@@ -1,8 +1,10 @@
 window.AudioContext = window.AudioContext||window.webkitAudioContext;
 context = new AudioContext();
 context.position = 0;
-context.postition_diff = 0;
+context.position_diff = 0;
 context.duration = 0;
+
+
 
 window.Collaborave = {
   Models: {},
@@ -10,6 +12,11 @@ window.Collaborave = {
   Views: {},
   Routers: {},
   initialize: function() {
+    Collaborave.getPosition = function (element){
+      var el = $(element);
+      var position = [el.offset().left, el.offset().top];
+      return position;
+    };
     new Collaborave.Routers.Router({$rootEl: $("#content")});
 		Backbone.history.start();
 		Collaborave.masterTrack = context.createGain();
@@ -45,28 +52,24 @@ Collaborave.updateTimer = function (){
 
   //set max time
   if (context.duration < context.position) {
-    timeoffset = duration;
-    pauseTrack();   
-    document.getElementById("timer").innerHTML = timerString(timeoffset);  
+    context.position = context.duration;
+    Collaborave.currentProject.pause();
+    document.getElementById("timer").innerHTML = timerString(context.position);  
   }
 
   //set minimum time
   if (context.position < 0) {
-    timeoffset = 0;
-    pauseTrack();
-    document.getElementById("timer").innerHTML = timerString(timeoffset); 
+    context.position = 0;
+    Collaborave.currentProject.pause();
+    document.getElementById("timer").innerHTML = timerString(context.position); 
   } 
 
   //update timer (made acurate thanks to the web audio API's currentTimer)
-  if (context.playing == true) {
-    context.position = context.currentTime - transport;
-    timeoffset = timeoffset + transport; 
-    if (timeoffset != 0) document.getElementById("timer").innerHTML = timerString(timeoffset); 
-    //this line may be unnecessary - originally that padding function worked for everything but zero
-    if (timeoffset == 0) document.getElementById("timer").innerHTML = '00:00.00'; 
-    transport = context.currentTime;    
+  if (context.playing === true) {
+    context.position += (context.currentTime - context.position_diff);
+    if (context.position != 0) document.getElementById("timer").innerHTML = timerString(context.position);       
   }
-
+  context.position_diff = context.currentTime;
   // drawSlider(); 
 
   //draw time slider
@@ -83,7 +86,7 @@ Collaborave.updateTimer = function (){
     minutes = Math.floor(time/60);
     seconds = Math.floor(time - (minutes*60));
     centiseconds = time - Math.floor(time);
-    string = zeroPad(minutes,2) + ":" + zeroPad(seconds,2) + '.' + zeroPad(Math.round(centiseconds*100),2);
+    string = zeroPad(minutes,2) + ":" + zeroPad(seconds,2) + '.' + zeroPad(Math.floor(centiseconds*100),2);
     return string;  
   }  
 
@@ -94,9 +97,4 @@ Collaborave.updateTimer = function (){
   }
 }
 
-$(document).ready(function(){
 
-  Collaborave.initialize();
-  setInterval(Collaborave.updateTimer, 10);
-
-});

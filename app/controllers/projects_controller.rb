@@ -1,5 +1,5 @@
 class ProjectsController < ApplicationController
-	before_action :signed_in_user
+	# before_action :signed_in_user
 
 	def create
     @project = Project.new(project_params)

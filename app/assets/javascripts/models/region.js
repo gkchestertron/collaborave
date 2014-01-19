@@ -13,7 +13,7 @@ Collaborave.Models.Region = Backbone.Model.extend({
 		var context = this.context;
     var step = Math.ceil( data.length / width );
     var amp = height / 2;
-    context.fillStyle = "silver";
+    context.fillStyle = '#ccc';
     context.clearRect(0,0,width,height);
     for(var i=0; i < width; i++){
       var min = 1.0;

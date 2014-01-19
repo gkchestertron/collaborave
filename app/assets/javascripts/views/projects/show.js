@@ -21,19 +21,15 @@ Collaborave.Views.Project = Backbone.View.extend({
 		this.model.play.bind(this.model)();
 	},
 	stop: function () {
-		console.log(this.model);
 		this.model.stop.bind(this.model)();
 	},
 	rewind: function () {
-		console.log(this.model);
 		this.model.rewind.bind(this.model)();
 	},
 	fastForward: function () {
-		console.log(this.model);
 		this.model.fastForward.bind(this.model)();
 	},
 	pause: function () {
-		console.log(this.model);
 		this.model.pause.bind(this.model)();
 	}
 });

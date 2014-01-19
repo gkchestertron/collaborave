@@ -3,9 +3,15 @@ Collaborave.Routers.Router = Backbone.Router.extend({
 		this.$rootEl = options.$rootEl;
 	},
 	routes: {
+		'': 'projectShow',
 		'projects/:id': 'projectShow'
 	},
 	projectShow: function (id) {
+
+		if (!id) {
+			var id = 2;
+		}
+
 		var that = this;
 		var project = new Collaborave.Models.Project({ id: id });
 

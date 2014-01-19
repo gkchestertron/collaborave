@@ -16,7 +16,7 @@ Collaborave.Models.Project = Backbone.Model.extend({
 	pause: function () {
 		if (context.playing) {
 			context.playing = false;
-			context.position += (context.currentTime - context.position_diff);
+			
 			this.get('tracks').each(function (track) {
 				track.stop();
 			});
@@ -29,7 +29,7 @@ Collaborave.Models.Project = Backbone.Model.extend({
 		}
 		if (!context.playing) {	
 			context.playing = true;
-			context.position_diff = context.currentTime;
+			// context.position_diff = context.currentTime;
 			this.get('tracks').each(function (track) {
 				track.play();
 			});
@@ -38,6 +38,7 @@ Collaborave.Models.Project = Backbone.Model.extend({
 	stop: function () {
 		context.playing = false;
 		context.position = 0;
+		document.getElementById("timer").innerHTML = '00:00.00';   
 		this.get('tracks').each(function (track) {
 			track.stop();
 		});
