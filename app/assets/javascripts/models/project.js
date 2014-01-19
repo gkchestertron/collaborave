@@ -1,7 +1,4 @@
 Collaborave.Models.Project = Backbone.Model.extend({
-	initialize: function () {
-		this.setup_master_filters();
-	},
 	urlRoot: '/projects',
 	parse: function (data) {
 		var that = this;
@@ -64,17 +61,5 @@ Collaborave.Models.Project = Backbone.Model.extend({
 			context.position = 0;
 		}
 		this.play();
-	}, setup_master_filters: function () {
-		var masterVolume = new Collaborave.Models.Filter({
-			name: 'masterVolume',
-			filter_type: 'createGain',
-			settings: JSON.stringify({gain: { value: 1 }})
-		});	
-		this.set('filters', new Collaborave.Collections.Filters(masterVolume, {parent: track}));
-		this.get('filters').add({
-			name: 'analyzer',
-			filter_type: 'createAnalyzer',
-			settings: JSON.stringify({smoothingTimeConstant: 0.5, fftsize: 32})
-		});
 	}
 });

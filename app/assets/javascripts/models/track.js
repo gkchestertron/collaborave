@@ -36,7 +36,7 @@ Collaborave.Models.Track = Backbone.Model.extend({
 		for (var i = 1; i < this.signal_path.length; i++) {
 			this.signal_path[i-1].connect(this.signal_path[i]);
 		}
-		track.signal_path[track.signal_path.length - 1].connect(context.destination);
+		track.signal_path[track.signal_path.length - 1].connect(Collaborave.masterTrack);
 	},
 	urlRoot: '/tracks',
 	parse: function (data) {

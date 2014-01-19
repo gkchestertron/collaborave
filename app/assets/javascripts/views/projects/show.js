@@ -18,7 +18,6 @@ Collaborave.Views.Project = Backbone.View.extend({
 		return this.$el;
 	},
 	play: function () {
-		console.log(this.model);
 		this.model.play.bind(this.model)();
 	},
 	stop: function () {
