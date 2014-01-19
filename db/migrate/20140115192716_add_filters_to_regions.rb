@@ -1,6 +1,6 @@
 class AddFiltersToRegions < ActiveRecord::Migration
   def change
-  	remove_column :regions, :settings
+  	#remove_column :regions, :settings
   	add_column :filters, :region_id, :integer
   	add_column :filters, :region_diff_id, :integer
   	add_index :filters, :region_id
