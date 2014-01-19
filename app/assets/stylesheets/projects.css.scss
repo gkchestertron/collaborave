@@ -1,46 +1,60 @@
 /* board css */
-    .fader {
-      float:left;
-      margin:10px;
-      padding:10px;
-      border: 1px solid #ccc;
-    }
-    
-    #loading {
-      clear:both;
-    }
+.track {
+  margin:10px;
+  border: 1px solid #ccc;
+  height: 200px;
+}
 
-    .trackMeter{
-      float:left;
-    }
-    #analyzeThis{
-      margin:10px;
-      padding:10px;
-      border: 1px solid #ccc;
-      width:652px;
-      
-    
-      background: rgba(255,255,255,.8);
-    }
+.controls {
+  float: left;
+  border-right: 1px solid #ccc;
+  height:100%;
+  width: 100px;
+}
 
-    #analyzer {
-      margin-left: 65px;
-    }
+.controls h2 {
+  margin:10px;
+}
 
-    #master {
-      width:131px;
-      margin-right:100%;
-    }
+#loading {
+  clear:both;
+}
 
-    #track_path {
-      width:180px;
-    }
+.trackMeter{
+  float:left;
+}
+
+#analyzeThis{
+  margin:10px;
+  padding:10px;
+  border: 1px solid #ccc;
+ 
+  
+
+  background: rgba(255,255,255,.8);
+}
+
+#analyzer {
+
+}
+
+#master {
+  width:131px;
+  margin-right:100%;
+}
+
+#mixer {
+
+}
+
+#track_path {
+  width:180px;
+}
 
 #record.recording { 
   background: red;
   background: -webkit-radial-gradient(center, ellipse cover, #ff0000 0%, #fff 75%, #fff 100%, #fff 100%); }
 
-.wavform {
-  border: 1px solid #ccc;
-  margin:10px;
+.wavforms {
+  float: left;
 }   

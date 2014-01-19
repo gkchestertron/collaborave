@@ -191,7 +191,7 @@ function trackBuilder(){
         '<div><canvas id="trackPanner' + i +'" width="60" height="20"></canvas> pan</div>' +  
         '<div><div><b>volume</b></div><canvas id="trackVolume' + i +'" width="20" height="130"></canvas>' +
         '<canvas id="trackMeter' + i + '" width="10" height="130" style="margin-left:10px;"></canvas><button id="muteTrack' + i + '" onclick="muteTrack(' + i + ')">Mute</button><button id="soloTrack' + i + '" onclick="soloTrack(' + i + ')">Solo</button></div></div>').appendTo('#mixer')
-        .appendTo('#mixer') ;
+        .appendTo('#mixer');
 
     //array for control canvas contexts    
     ctx[i] = {tracknum: i, volume: $("#trackVolume" + i).get()[0].getContext("2d"), meter: $("#trackMeter" + i).get()[0].getContext("2d"), panner: $("#trackPanner" + i).get()[0].getContext("2d"), low: $("#trackLow" + i).get()[0].getContext("2d"), mid: $("#trackMid" + i).get()[0].getContext("2d"), midFreq: $("#trackMidFreq" + i).get()[0].getContext("2d"), high: $("#trackHigh" + i).get()[0].getContext("2d")};

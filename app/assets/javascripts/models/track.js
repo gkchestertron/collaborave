@@ -3,7 +3,12 @@ Collaborave.Models.Track = Backbone.Model.extend({
 		this.setup_default_filters();
 		this.signal_path = [];
 		this.create_signal_path();
+		this.add_track_div();
 	},
+	add_track_div: function () {
+		var track = this;
+		trackDiv = $('<div><b>' + track.get('name') + '</div>').appendTo('#mixer');
+      },
 	create_signal_path: function () {
 		var track = this;
 
@@ -11,7 +16,6 @@ Collaborave.Models.Track = Backbone.Model.extend({
 		track.get('filters').each(function (filter) {
 			var filter_type = filter.get('filter_type');
 			var settings = JSON.parse(filter.get('settings'));
-			console.log(settings)
 			var name = filter.get('name');
 			var filter = context[filter_type]();
 			filter.name = name
@@ -105,7 +109,6 @@ Collaborave.Models.Track = Backbone.Model.extend({
 			} else {
 				filter[key] = val;
 			}
-			console.log(filter)
 		});
 	}
 });

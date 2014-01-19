@@ -1,0 +1,16 @@
+<h1><%= project.get('name') %></h1>
+<div id="analyzeThis">
+
+  <canvas id="analyzer" width="900" height="500"></canvas>
+  <div>
+    <h1 id="timer">00:00.00</h1> 
+    <canvas id="timeSlider" width="600" height="10" style="display: block;"></canvas>
+  </div>
+  <button class="btn btn-danger" id="stop">stop</button>
+  <button class="btn btn-primary" id="pause">pause</button>
+  <button class="btn btn-success" id="play">play</button>
+  <button class="btn btn-default" id="rewind">rewind</button>
+  <button class="btn btn-default" id="fast-forward">fast forward</button>
+</div>
+
+<div id="mixer"></div>

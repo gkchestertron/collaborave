@@ -10,7 +10,7 @@ window.Collaborave = {
   Views: {},
   Routers: {},
   initialize: function() {
-    new Collaborave.Routers.Router();
+    new Collaborave.Routers.Router({$rootEl: $("#content")});
 		Backbone.history.start();
   }
 };

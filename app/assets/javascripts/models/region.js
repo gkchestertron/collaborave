@@ -8,6 +8,26 @@ Collaborave.Models.Region = Backbone.Model.extend({
 		data.filters = new Collaborave.Collections.Filters(filters, {parent: that, parent_url: '/regions/', parse: true}) 
 		return data;
 	},
+	drawBuffer: function ( width, height ) {
+		var data = this.buffer.getChannelData(0);
+		var context = this.context;
+    var step = Math.ceil( data.length / width );
+    var amp = height / 2;
+    context.fillStyle = "silver";
+    context.clearRect(0,0,width,height);
+    for(var i=0; i < width; i++){
+      var min = 1.0;
+      var max = -1.0;
+      for (j=0; j<step; j++) {
+          var datum = data[(i*step)+j]; 
+          if (datum < min)
+              min = datum;
+          if (datum > max)
+              max = datum;
+      }
+      context.fillRect(i,(1+min)*amp,1,Math.max(1,(max-min)*amp));
+    }
+	},
 	load: function () {
 		var region = this;
 	  var request = new XMLHttpRequest();
@@ -22,6 +42,7 @@ Collaborave.Models.Region = Backbone.Model.extend({
 	        context.duration = buffer.duration;
 	      }
 	      region.buffer = buffer;
+	      region.drawBuffer(817, region.height)
 	    });
 	  }
 	  request.send();
