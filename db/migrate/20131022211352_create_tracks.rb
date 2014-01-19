@@ -7,5 +7,7 @@ class CreateTracks < ActiveRecord::Migration
 
       t.timestamps
     end
+    create_table :regions do |t|
+    end
   end
 end

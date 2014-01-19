@@ -58,12 +58,12 @@ Collaborave.Routers.Router = Backbone.Router.extend({
 		  // clear the current state
 		  Collaborave.analyzerctx.clearRect(0, 0, 1025, 300);
 		  // set the fill style
-		  Collaborave.analyzerctx.fillStyle='#999';
+		  Collaborave.analyzerctx.fillStyle='#ccc';
 		  // create the bars
 		  drawSpectrum(array);
 
 		  function drawSpectrum(array) {
-		    for ( var i = 0, j = 0; i < (array.length); i+=2, j++ ){
+		    for ( var i = 0, j = 0; i < (array.length); i++, j++ ){
 		          var value2 = array[i];
 		          Collaborave.analyzerctx.fillRect(i,299-value2,1,300);
 		    }
