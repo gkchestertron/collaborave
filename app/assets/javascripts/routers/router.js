@@ -12,7 +12,7 @@ Collaborave.Routers.Router = Backbone.Router.extend({
 		project.fetch({
 			success: function () {
 				project.load();
-				Collaborave.project = project;
+				Collaborave.currentProject = project;
 				var view = new Collaborave.Views.Project({ model: project });
 				that._swapView(view);
 				that.setupMainFilters();
