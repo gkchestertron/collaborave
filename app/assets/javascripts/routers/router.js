@@ -12,7 +12,7 @@ Collaborave.Routers.Router = Backbone.Router.extend({
 		project.fetch({
 			success: function () {
 				project.load();
-				Collaborave.testRegion = project.get('tracks').first().get('regions').first();
+				Collaborave.project = project;
 				var view = new Collaborave.Views.Project({ model: project });
 				that._swapView(view);
 

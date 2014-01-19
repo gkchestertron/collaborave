@@ -92,7 +92,7 @@ class ProjectsController < ApplicationController
         filter_params = track_param.delete(:filters)
         region_params = track_param.delete(:regions)
         track = Track.find(track_param[:id])
-        if track.update_attriubutes(track_param)
+        if track.update_attributes(track_param)
           update_filters(filter_params, track) if filter_params
           update_regions(region_params, track) if region_params
         end
