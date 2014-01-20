@@ -1,6 +1,9 @@
 Collaborave.Views.Track = Backbone.View.extend({
 	events: {
-		'mousedown canvas.volume': 'volume'
+		'mousedown canvas.volume': 'volume',
+		'mousedown canvas.highs': 'knob',
+		'mousedown canvas.mids': 'knob',
+		'mousedown canvas.lows': 'knob'
 	},
 	template: JST['tracks/show'],
 	render: function () {
@@ -13,23 +16,28 @@ Collaborave.Views.Track = Backbone.View.extend({
 			trackView.$el.find('.wavforms').append(regionView.render());
 		});
 		var volumectx = this.$el.find('canvas.volume').get()[0].getContext("2d");
-		this.drawTrackVolume(volumectx, 65)
+		this.drawTrackVolume(volumectx, 65);
+		var highsctx = this.$el.find('canvas.highs').get()[0].getContext("2d");
+		this.drawKnob(highsctx, 30);
+		var highsctx = this.$el.find('canvas.mids').get()[0].getContext("2d");
+		this.drawKnob(highsctx, 30);
+		var highsctx = this.$el.find('canvas.lows').get()[0].getContext("2d");
+		this.drawKnob(highsctx, 30);
 		return this.$el
 	},
 	volume: function (event) {
 		event.preventDefault();
-		var track = this;
+		var trackView = this;
 		var control = event.target;
 		var trackctx = control.getContext("2d");
     var value = event.pageY - Collaborave.getPosition(control)[1];
-    track.drawTrackVolume(trackctx, value);
-    track.model.set_filter('volume', {gain: { value: (130 - value)/65}});
+    trackView.drawTrackVolume(trackctx, value);
+    trackView.model.set_filter('volume', {gain: { value: (130 - value)/65}});
     $(window).on('mousemove',function(event){
       
       value = event.pageY - Collaborave.getPosition(control)[1];
-      track.drawTrackVolume(trackctx, value);
-      console.log(value)
-      track.model.set_filter('volume', {gain: { value: (130-value)/65}});
+      trackView.drawTrackVolume(trackctx, value);
+      trackView.model.set_filter('volume', {gain: { value: (130-value)/65}});
     });
     //pause and play if was playing and unbind the dragging
     $(window).mouseup(function(f){  
@@ -37,10 +45,39 @@ Collaborave.Views.Track = Backbone.View.extend({
     });
 	},
 	drawTrackVolume: function (ctx, value){
-      ctx.clearRect(0, 0, 20, 130);
-      ctx.fillStyle='#999';
-      ctx.fillRect(0,0,20,130);
-      ctx.fillStyle='#ccc';
-      ctx.fillRect(0,0,20,value);
-    }	
+    ctx.clearRect(0, 0, 20, 130);
+    ctx.fillStyle='#999';
+    ctx.fillRect(0,0,20,130);
+    ctx.fillStyle='#ccc';
+    ctx.fillRect(0,0,20,value);
+  },
+  knob: function (event) { 
+  	event.preventDefault();
+		var trackView = this;
+		var control = event.target;
+		var knobctx = control.getContext("2d");
+    var value = event.pageX - Collaborave.getPosition(control)[0];
+    trackView.drawKnob(knobctx, value);
+    var filter_name = $(event.target).data('name');
+    trackView.model.set_filter(filter_name, {gain: {value: value/2}})
+
+    $(window).on('mousemove',function (event) {
+      value = event.pageX - Collaborave.getPosition(control)[0];
+      trackView.drawKnob(knobctx, value);
+      trackView.model.set_filter(filter_name, {gain: {value: value/2}})
+    });
+    
+    $(window).mouseup(function(f){  
+      $(window).off('mousemove');
+    });
+  },
+  drawKnob: function (ctx, value) {
+  	ctx.clearRect(0, 0, 60, 20);
+    ctx.fillStyle='#ccc';
+    ctx.fillRect(0,0,60,20);
+    ctx.fillStyle='#999';
+    ctx.fillRect(value-3,0,5,20);
+    ctx.fillStyle='#ccc';
+    ctx.fillRect(value - 1,0,1,20);
+  }  
 });
