@@ -94,8 +94,11 @@ Collaborave.Models.Track = Backbone.Model.extend({
 			filter_type: 'createBiquadFilter',
 			settings: JSON.stringify({type: 'lowshelf', frequency: { value: 440 }, gain: { value: 0 }})
 		});
-	//add panner later - may need to get fancy and add a functions parameter to call functions on 
-	//generated nodes
+		this.get('filters').add({
+			name: 'pan',
+			filter_type: 'createPanner',
+			settings: JSON.stringify({panningModel: "equalpower"})
+		});
 	},
 	set_filter: function(name, settings) {
 		var track = this;

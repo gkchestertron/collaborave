@@ -3,7 +3,8 @@ Collaborave.Views.Track = Backbone.View.extend({
 		'mousedown canvas.volume': 'volume',
 		'mousedown canvas.highs': 'knob',
 		'mousedown canvas.mids': 'knob',
-		'mousedown canvas.lows': 'knob'
+		'mousedown canvas.lows': 'knob',
+		'mousedown canvas.pan': 'pan'
 	},
 	template: JST['tracks/show'],
 	render: function () {
@@ -22,6 +23,8 @@ Collaborave.Views.Track = Backbone.View.extend({
 		var highsctx = this.$el.find('canvas.mids').get()[0].getContext("2d");
 		this.drawKnob(highsctx, 30);
 		var highsctx = this.$el.find('canvas.lows').get()[0].getContext("2d");
+		this.drawKnob(highsctx, 30);
+		var highsctx = this.$el.find('canvas.pan').get()[0].getContext("2d");
 		this.drawKnob(highsctx, 30);
 		return this.$el
 	},
@@ -66,7 +69,7 @@ Collaborave.Views.Track = Backbone.View.extend({
       trackView.drawKnob(knobctx, value);
       trackView.model.set_filter(filter_name, {gain: {value: value/2}})
     });
-    
+
     $(window).mouseup(function(f){  
       $(window).off('mousemove');
     });
@@ -79,5 +82,26 @@ Collaborave.Views.Track = Backbone.View.extend({
     ctx.fillRect(value-3,0,5,20);
     ctx.fillStyle='#ccc';
     ctx.fillRect(value - 1,0,1,20);
+  },
+  pan: function (event) { 
+  	event.preventDefault();
+		var trackView = this;
+		var control = event.target;
+		var knobctx = control.getContext("2d");
+    var value = event.pageX - Collaborave.getPosition(control)[0];
+    trackView.drawKnob(knobctx, value);
+    var filter_name = $(event.target).data('name');
+    trackView.model.get('filters').where({name: 'pan'})[0]
+
+    $(window).on('mousemove',function (event) {
+      value = event.pageX - Collaborave.getPosition(control)[0];
+      trackView.drawKnob(knobctx, value);
+      var panner = trackView.model.signal_path[4];
+      panner.setPosition((value-30)/30,0,0.1 )
+    });
+
+    $(window).mouseup(function(f){  
+      $(window).off('mousemove');
+    });
   }  
 });
