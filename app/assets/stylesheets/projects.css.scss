@@ -19,6 +19,7 @@
 .knob {
   float:left;
   margin: 5px;
+  margin-bottom: 19px;
 }
 
 #loading {
@@ -33,9 +34,6 @@
   margin:10px;
   padding:10px;
   border: 1px solid #ccc;
- 
-  
-
   background: rgba(255,255,255,.8);
 }
 
@@ -49,7 +47,21 @@
 }
 
 #mixer {
- 
+
+}
+
+.track-buttons {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
+
+.mute {
+  
+}
+
+.solo {
+
 }
 
 #track_path {
