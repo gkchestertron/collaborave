@@ -4,7 +4,9 @@ Collaborave.Views.Track = Backbone.View.extend({
 		'mousedown canvas.highs': 'knob',
 		'mousedown canvas.mids': 'knob',
 		'mousedown canvas.lows': 'knob',
-		'mousedown canvas.pan': 'pan'
+		'mousedown canvas.pan': 'pan',
+		'click button.mute': 'mute',
+		'click button.solo': 'solo'
 	},
 	template: JST['tracks/show'],
 	render: function () {
@@ -108,5 +110,63 @@ Collaborave.Views.Track = Backbone.View.extend({
     $(window).mouseup(function(f){  
       $(window).off('mousemove');
     });
-  }  
+  },
+  mute: function (event) {
+  	var track = this.model;
+  	var button = event.target;
+  	if (track.muted === true) {
+  		track.muted = false;
+  		track.set_filter('mute', {gain: {value: 1}});
+  		$(button).removeClass('btn-danger');
+  	} else {
+  		track.muted = true;
+  		track.set_filter('mute', {gain: {value: 0}});
+  		$(button).addClass('btn-danger');
+  	}
+  },
+  solo: function () {
+  	var track = this.model;
+  	var button = event.target;
+  	if (track.soloed === true) {
+  		track.soloed = false;
+  		var anySolos = false;
+  		//need to account for whether any tracks are soloed...
+  		Collaborave.currentProject.get('tracks').each(function (ptrack) { 
+  			if (ptrack.soloed === true) {
+  				anySolos = true;
+  			}	
+  		});
+
+  		if (anySolos === true) {
+
+  			track.set_filter('mute', {gain: {value: 0}})
+
+  		} else {
+
+  			Collaborave.currentProject.get('tracks').each(function (ptrack) {
+	  			if (ptrack.muted === true) {
+	  				ptrack.set_filter('mute', {gain: {value: 0}});
+	  			} else {
+	  				ptrack.set_filter('mute', {gain: {value: 1}});
+	  			}
+  			});
+
+  		}
+
+  		$(button).removeClass('btn-success');
+  	} else {
+  		track.soloed = true;
+
+  		Collaborave.currentProject.get('tracks').each(function (ptrack) {
+  			if (ptrack.soloed === true) {
+  				ptrack.set_filter('mute', {gain: {value: 1}});
+  			} else {
+  				ptrack.set_filter('mute', {gain: {value: 0}});
+  			}
+  		});
+
+  		
+  		$(button).addClass('btn-success');
+  	}
+  } 
 });

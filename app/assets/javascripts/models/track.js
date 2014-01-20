@@ -99,6 +99,11 @@ Collaborave.Models.Track = Backbone.Model.extend({
 			filter_type: 'createPanner',
 			settings: JSON.stringify({panningModel: "equalpower"})
 		});
+		this.get('filters').add({
+			name: 'mute',
+			filter_type: 'createGain',
+			settings: JSON.stringify({gain: { value: 1 }})
+		});
 	},
 	set_filter: function(name, settings) {
 		var track = this;
