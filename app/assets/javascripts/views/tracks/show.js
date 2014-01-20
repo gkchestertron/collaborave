@@ -116,9 +116,7 @@ Collaborave.Views.Track = Backbone.View.extend({
   	var button = event.target;
   	if (track.muted === true) {
   		track.muted = false;
-  		if (track.anySolos) {
-	  		track.set_filter('mute', {gain: {value: 1}});
-	  	}
+  		track.set_filter('mute', {gain: {value: 1}});
   		$(button).removeClass('btn-danger');
   	} else {
   		track.muted = true;
@@ -141,16 +139,12 @@ Collaborave.Views.Track = Backbone.View.extend({
 
   		if (track.anySolos === true) {
 
-  			track.set_filter('mute', {gain: {value: 0}})
+  			track.set_filter('solo', {gain: {value: 0}})
 
   		} else {
 
   			Collaborave.currentProject.get('tracks').each(function (ptrack) {
-	  			if (ptrack.muted === true) {
-	  				ptrack.set_filter('mute', {gain: {value: 0}});
-	  			} else {
-	  				ptrack.set_filter('mute', {gain: {value: 1}});
-	  			}
+	  				ptrack.set_filter('solo', {gain: {value: 1}});
   			});
 
   		}
@@ -161,9 +155,9 @@ Collaborave.Views.Track = Backbone.View.extend({
 
   		Collaborave.currentProject.get('tracks').each(function (ptrack) {
   			if (ptrack.soloed === true) {
-  				ptrack.set_filter('mute', {gain: {value: 1}});
+  				ptrack.set_filter('solo', {gain: {value: 1}});
   			} else {
-  				ptrack.set_filter('mute', {gain: {value: 0}});
+  				ptrack.set_filter('solo', {gain: {value: 0}});
   			}
   		});
 

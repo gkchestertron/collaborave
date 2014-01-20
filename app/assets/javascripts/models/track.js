@@ -4,6 +4,8 @@ Collaborave.Models.Track = Backbone.Model.extend({
 		this.signal_path = [];
 		this.create_signal_path();
 		this.add_track_div();
+		this.muted = false;
+		this.soloed = false;
 	},
 	add_track_div: function () {
 		var track = this;
@@ -101,6 +103,11 @@ Collaborave.Models.Track = Backbone.Model.extend({
 		});
 		this.get('filters').add({
 			name: 'mute',
+			filter_type: 'createGain',
+			settings: JSON.stringify({gain: { value: 1 }})
+		});
+		this.get('filters').add({
+			name: 'solo',
 			filter_type: 'createGain',
 			settings: JSON.stringify({gain: { value: 1 }})
 		});
