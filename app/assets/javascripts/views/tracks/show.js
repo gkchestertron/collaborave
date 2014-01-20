@@ -34,13 +34,18 @@ Collaborave.Views.Track = Backbone.View.extend({
 		var control = event.target;
 		var trackctx = control.getContext("2d");
     var value = event.pageY - Collaborave.getPosition(control)[1];
+    if (value > 130) {value = 130};
+    if (value < 0) {value = 0}; 
     trackView.drawTrackVolume(trackctx, value);
-    trackView.model.set_filter('volume', {gain: { value: (130 - value)/65}});
+    trackView.model.set_filter('volume', {gain: { value: (130 - value)/130}});
     $(window).on('mousemove',function(event){
       
       value = event.pageY - Collaborave.getPosition(control)[1];
+      if (value > 130) {value = 130};
+	    if (value < 0) {value = 0};
       trackView.drawTrackVolume(trackctx, value);
-      trackView.model.set_filter('volume', {gain: { value: (130-value)/65}});
+      trackView.model.set_filter('volume', {gain: { value: (130-value)/130}});
+      console.log(value);
     });
     //pause and play if was playing and unbind the dragging
     $(window).mouseup(function(f){  

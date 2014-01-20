@@ -37,12 +37,12 @@ window.Collaborave = {
 
 		//main connections  
 		Collaborave.mainMeterNode = context.createScriptProcessor(2048, 1, 1);  
-		Collaborave.mainMeterNode.connect(context.destination);
+		
 		Collaborave.masterTrack.connect(Collaborave.mainSplitter);
 		Collaborave.mainSplitter.connect(Collaborave.mainMeter,0,0);
 		Collaborave.mainSplitter.connect(Collaborave.mainMeter2,1,0);
 		Collaborave.masterTrack.connect(Collaborave.analyzer);
-		Collaborave.analyzer.connect(context.destination);
+		
 		Collaborave.mainMeter.connect(Collaborave.mainMeterNode);
 		Collaborave.masterTrack.connect(context.destination);
   }
