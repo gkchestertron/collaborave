@@ -38,12 +38,20 @@
 }
 
 #analyzer {
-
+  width: 786px;
+  margin: 2px 10px 10px 0px;
 }
 
 #master {
   width:131px;
   margin-right:100%;
+}
+
+.master-controls {
+  float: left;
+  border: 1px solid #ccc;
+  height:300px;
+  width: 100px;
 }
 
 #mixer {

@@ -36,17 +36,17 @@ Collaborave.Views.Track = Backbone.View.extend({
 		var control = event.target;
 		var trackctx = control.getContext("2d");
     var value = event.pageY - Collaborave.getPosition(control)[1];
-    if (value > 130) {value = 130};
+    if (value > 152) {value = 152};
     if (value < 0) {value = 0}; 
     trackView.drawTrackVolume(trackctx, value);
-    trackView.model.set_filter('volume', {gain: { value: (130 - value)/130}});
+    trackView.model.set_filter('volume', {gain: { value: (152 - value)/152}});
     $(window).on('mousemove',function(event){
       
       value = event.pageY - Collaborave.getPosition(control)[1];
-      if (value > 130) {value = 130};
+      if (value > 152) {value = 152};
 	    if (value < 0) {value = 0};
       trackView.drawTrackVolume(trackctx, value);
-      trackView.model.set_filter('volume', {gain: { value: (130-value)/130}});
+      trackView.model.set_filter('volume', {gain: { value: (152-value)/152}});
       console.log(value);
     });
     //pause and play if was playing and unbind the dragging
@@ -55,9 +55,9 @@ Collaborave.Views.Track = Backbone.View.extend({
     });
 	},
 	drawTrackVolume: function (ctx, value){
-    ctx.clearRect(0, 0, 20, 130);
+    ctx.clearRect(0, 0, 20, 152);
     ctx.fillStyle='#999';
-    ctx.fillRect(0,0,20,130);
+    ctx.fillRect(0,0,20,152);
     ctx.fillStyle='#ccc';
     ctx.fillRect(0,0,20,value);
   },
