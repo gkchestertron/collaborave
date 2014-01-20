@@ -35,6 +35,16 @@
   padding:10px;
   border: 1px solid #ccc;
   background: rgba(255,255,255,.8);
+  position: fixed;
+  top: 62px;
+  width: 898px;
+  background: white;
+  z-index: 100;
+}
+
+#analyzeThis h1 {
+  position: absolute;
+right: 20px;
 }
 
 #analyzer {
@@ -59,7 +69,7 @@
 }
 
 #mixer {
-
+  margin-top: 436px;
 }
 
 .track-buttons {
