@@ -69,12 +69,14 @@ Collaborave.Views.Track = Backbone.View.extend({
     var value = event.pageX - Collaborave.getPosition(control)[0];
     trackView.drawKnob(knobctx, value);
     var filter_name = $(event.target).data('name');
-    trackView.model.set_filter(filter_name, {gain: {value: value/2}})
+    trackView.model.set_filter(filter_name, {gain: {value: (value-30)/2}})
 
     $(window).on('mousemove',function (event) {
       value = event.pageX - Collaborave.getPosition(control)[0];
+      if (value > 60) {value = 60};
+      if (value < 0) {value = 0};
       trackView.drawKnob(knobctx, value);
-      trackView.model.set_filter(filter_name, {gain: {value: value/2}})
+      trackView.model.set_filter(filter_name, {gain: {value: (value-30)/2}})
     });
 
     $(window).mouseup(function(f){  
@@ -102,6 +104,8 @@ Collaborave.Views.Track = Backbone.View.extend({
 
     $(window).on('mousemove',function (event) {
       value = event.pageX - Collaborave.getPosition(control)[0];
+      if (value > 60) {value = 60};
+      if (value < 0) {value = 0};
       trackView.drawKnob(knobctx, value);
       var panner = trackView.model.signal_path[4];
       panner.setPosition((value-30)/30,0,0.1 )
