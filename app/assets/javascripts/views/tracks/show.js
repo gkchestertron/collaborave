@@ -116,7 +116,9 @@ Collaborave.Views.Track = Backbone.View.extend({
   	var button = event.target;
   	if (track.muted === true) {
   		track.muted = false;
-  		track.set_filter('mute', {gain: {value: 1}});
+  		if (track.anySolos) {
+	  		track.set_filter('mute', {gain: {value: 1}});
+	  	}
   		$(button).removeClass('btn-danger');
   	} else {
   		track.muted = true;
@@ -133,11 +135,11 @@ Collaborave.Views.Track = Backbone.View.extend({
   		//need to account for whether any tracks are soloed...
   		Collaborave.currentProject.get('tracks').each(function (ptrack) { 
   			if (ptrack.soloed === true) {
-  				anySolos = true;
+  				track.anySolos = true;
   			}	
   		});
 
-  		if (anySolos === true) {
+  		if (track.anySolos === true) {
 
   			track.set_filter('mute', {gain: {value: 0}})
 
