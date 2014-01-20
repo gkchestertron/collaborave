@@ -36,9 +36,9 @@ Collaborave.Views.Project = Backbone.View.extend({
 		this.model.pause.bind(this.model)();
 	},
 	drawTrackVolume: function (ctx, value){
-    ctx.clearRect(0, 0, 20, 232);
+    ctx.clearRect(0, 0, 20, 252);
     ctx.fillStyle='#999';
-    ctx.fillRect(0,0,20,232);
+    ctx.fillRect(0,0,20,252);
     ctx.fillStyle='#ccc';
     ctx.fillRect(0,0,20,value);
   },
@@ -48,17 +48,17 @@ Collaborave.Views.Project = Backbone.View.extend({
 		var control = event.target;
 		var trackctx = control.getContext("2d");
     var value = event.pageY - Collaborave.getPosition(control)[1];
-    if (value > 232) {value = 232};
+    if (value > 252) {value = 252};
     if (value < 0) {value = 0}; 
     trackView.drawTrackVolume(trackctx, value);
-    Collaborave.masterTrack.gain.value = (232 - value)/116;
+    Collaborave.masterTrack.gain.value = (252 - value)/116;
     $(window).on('mousemove',function(event){
       
       value = event.pageY - Collaborave.getPosition(control)[1];
-      if (value > 232) {value = 232};
+      if (value > 252) {value = 252};
 	    if (value < 0) {value = 0};
       trackView.drawTrackVolume(trackctx, value);
-      Collaborave.masterTrack.gain.value = (232 - value)/116;
+      Collaborave.masterTrack.gain.value = (252 - value)/116;
       console.log(value);
     });
     //pause and play if was playing and unbind the dragging
