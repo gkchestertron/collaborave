@@ -66,9 +66,9 @@ Collaborave.updateTimer = function (){
 
   //update timer (made acurate thanks to the web audio API's currentTimer)
   if (context.playing === true) {
-    context.position += (context.currentTime - context.position_diff);
-    if (context.position != 0) document.getElementById("timer").innerHTML = timerString(context.position);       
+    context.position += (context.currentTime - context.position_diff);      
   }
+  if (context.position != 0) document.getElementById("timer").innerHTML = timerString(context.position); 
   context.position_diff = context.currentTime;
   // drawSlider(); 
 

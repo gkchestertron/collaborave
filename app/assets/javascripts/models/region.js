@@ -31,7 +31,7 @@ Collaborave.Models.Region = Backbone.Model.extend({
 	load: function () {
 		var region = this;
 	  var request = new XMLHttpRequest();
-	  request.open('GET', region.get('path'), true);
+	  request.open('GET', region.get('path').path.url, true);
 	  request.responseType = 'arraybuffer';
 
 	  // Decode asynchronously

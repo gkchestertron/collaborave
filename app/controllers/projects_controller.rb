@@ -91,10 +91,16 @@ class ProjectsController < ApplicationController
       track_params.each do |track_param|
         filter_params = track_param.delete(:filters)
         region_params = track_param.delete(:regions)
-        track = Track.find(track_param[:id])
-        if track.update_attributes(track_param)
-          update_filters(filter_params, track) if filter_params
-          update_regions(region_params, track) if region_params
+        if track_param[:id]
+          track = Track.find(track_param[:id])
+          if track.update_attributes(track_param)
+            update_filters(filter_params, track) if filter_params
+            update_regions(region_params, track) if region_params
+          end
+        else
+          track = Track.new(track_param)
+          track.project = parent
+          track.save
         end
       end
     end
@@ -102,10 +108,16 @@ class ProjectsController < ApplicationController
     def update_filters(filter_params, parent)
       filter_params.each do |filter_param|
         filter_automation_params = filter_param.delete(:filter_automations)
-        filter = parent.filters.new(filter_param)
-        if filter.update_attributes(filter_param)
-          update_filter_automations(filter_automation_params, filter) if filter_automation_params
+        #have to check if save or update - this should eventually be broken into more granular methods
+        if filter_param[:id]
+          filter = Filter.find(filter_param[:id])
+          if filter.update_attributes(filter_param)
+            update_filter_automations(filter_automation_params, filter) if filter_automation_params
+          end
+        else
+          filter = parent.filters.create(filter_param)
         end
+
       end
     end
 
@@ -118,7 +130,7 @@ class ProjectsController < ApplicationController
     def update_regions(region_params, parent)
       region_params.each do |region_param|
         filter_params = region_param.delete(:filters)
-        region = parent.regions.new(region_param)
+        region = Region.find(region_param[:id])
         if region.update_attributes(region_param)
           update_filters(filter_params, region) if filter_params
         end 

@@ -68,6 +68,6 @@ class RegionsController < ApplicationController
 
   private
     def region_params
-      params.require(:region).permit(:name, :project_id, :start_time)
+      params.require(:region).permit(:path, :track_id, :start_time)
     end
 end

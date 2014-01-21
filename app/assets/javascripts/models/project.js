@@ -44,10 +44,14 @@ Collaborave.Models.Project = Backbone.Model.extend({
 		});
 	},
 	fastForward: function () {
-		this.pause();
 		if (context.position <= context.duration) {
-			context.position += 3;
-			this.play();
+			if (context.playing) {
+				this.pause();
+				context.position += 3;
+				this.play();
+			} else {
+				context.position += 3;
+			}
 		} else {
 			context.position = context.duration
 			this.pause();
@@ -55,12 +59,16 @@ Collaborave.Models.Project = Backbone.Model.extend({
 		
 	},
 	rewind: function () {
-		this.pause();
 		if (context.position >= 0) {	
-			context.position -= 3;
+			if (context.playing) {
+				this.pause();
+				context.position -= 3;
+				this.play();
+			} else {
+				context.position -= 3;
+			}
 		} else {
 			context.position = 0;
 		}
-		this.play();
 	}
 });

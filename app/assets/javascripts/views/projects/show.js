@@ -1,12 +1,27 @@
 Collaborave.Views.Project = Backbone.View.extend({
+	initialize: function () {
+		this.listenTo(this.model.get('tracks'), 'change add', this.render)
+	},
 	template: JST['projects/show'],
 	events: {
 		'click button#stop': 'stop',
-		'click button#play': 'play',
-		'click button#pause': 'pause',
-		'click button#rewind': 'rewind',
-		'click button#fast-forward': 'fastForward',
-		'mousedown canvas.volume': 'volume'
+		'click button.play': 'play',
+		'click button.pause': 'pause',
+		'mousedown button#rewind': 'rewind',
+		'mousedown button#fast-forward': 'fastForward',
+		'mousedown canvas.volume': 'volume',
+		'click button#add-track-button': 'addTrack',
+		'submit form#add-track-form': 'formPrevent'
+	},
+	formPrevent: function (event) {
+		event.preventDefault();
+	},
+	addTrack: function (event) {
+		event.preventDefault();
+		var projectView = this;
+		var $form = $('#add-track-form')
+		var formData = $form.serializeJSON();
+		this.model.get('tracks').create(formData);
 	},
 	render: function () {
 		var projectView = this;
@@ -14,25 +29,49 @@ Collaborave.Views.Project = Backbone.View.extend({
 		this.$el.html(content);
 		this.model.get('tracks').each(function (track) {
 			var trackView = new Collaborave.Views.Track({model: track});
-			projectView.$el.find('#mixer').append(trackView.render());
+			projectView.$el.find('#mixer').prepend(trackView.render());
 		});
 		var volumectx = this.$el.find('canvas.volume').get()[0].getContext("2d");
 		this.drawTrackVolume(volumectx, 116);
 		return this.$el;
+		testView = this;
 	},
-	play: function () {
+	play: function (event) {
+		var button = event.target;
+		$(button).removeClass('play');
+		$(button).removeClass('btn-success');
+		$(button).addClass('pause');
+		$(button).addClass('btn-primary');
+		$(button).text('pause');
 		this.model.play.bind(this.model)();
 	},
 	stop: function () {
+		var $button = $('button.pause');
+		$button.addClass('play');
+		$button.addClass('btn-success');
+		$button.removeClass('pause');
+		$button.removeClass('btn-primary');
+		$button.text('play');
+		this.model.pause.bind(this.model)();
 		this.model.stop.bind(this.model)();
 	},
 	rewind: function () {
-		this.model.rewind.bind(this.model)();
+		var project = this.model;
+		var down = setInterval(function () { project.rewind.bind(project)() }, 100);
+		$(window).on('mouseup', function () { clearInterval(down) });
 	},
 	fastForward: function () {
-		this.model.fastForward.bind(this.model)();
+		var project = this.model;
+		var down = setInterval(function () { project.fastForward.bind(project)() }, 100);
+		$(window).on('mouseup', function () { clearInterval(down) });
 	},
-	pause: function () {
+	pause: function (event) {
+		var button = event.target;
+		$(button).addClass('play');
+		$(button).addClass('btn-success');
+		$(button).removeClass('pause');
+		$(button).removeClass('btn-primary');
+		$(button).text('play');
 		this.model.pause.bind(this.model)();
 	},
 	drawTrackVolume: function (ctx, value){

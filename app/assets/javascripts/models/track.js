@@ -1,5 +1,6 @@
 Collaborave.Models.Track = Backbone.Model.extend({
 	initialize: function () {
+		var track = this;
 		this.setup_default_filters();
 		this.signal_path = [];
 		this.create_signal_path();

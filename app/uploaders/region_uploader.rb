@@ -1,5 +1,4 @@
 # encoding: utf-8
-
 CarrierWave.configure do |config|
   config.ftp_host = "s288250878.onlinehome.us"
   config.ftp_port = 21
@@ -10,9 +9,7 @@ CarrierWave.configure do |config|
   config.ftp_passive = true # false by default
 end
 
-class TrackRegionUploader < CarrierWave::Uploader::Base
-
-
+class RegionUploader < CarrierWave::Uploader::Base
 
   # Include RMagick or MiniMagick support:
   # include CarrierWave::RMagick
@@ -25,8 +22,7 @@ class TrackRegionUploader < CarrierWave::Uploader::Base
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
-   "uploads"
-   # "uploads2/#{model.class.to_s.underscore}/#{mounted_as}/#{model.track.project_id}"
+    "uploads2/#{model.class.to_s.underscore}/#{mounted_as}/#{model.track.project_id}"
   end
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
@@ -51,9 +47,9 @@ class TrackRegionUploader < CarrierWave::Uploader::Base
 
   # Add a white list of extensions which are allowed to be uploaded.
   # For images you might use something like this:
-   def extension_white_list
-     %w(wav mp3 mp4 ogg)
-   end
+  # def extension_white_list
+  #   %w(jpg jpeg gif png)
+  # end
 
   # Override the filename of the uploaded files:
   # Avoid using model.id or version_name here, see uploader/store.rb for details.

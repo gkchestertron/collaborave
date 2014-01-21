@@ -1,5 +1,6 @@
 class StaticPagesController < ApplicationController
   def home 
+    @region = Region.new
     # if signed_in?
     #   @new_project  = current_user.projects.build(author_id: current_user)
     #   @user = current_user

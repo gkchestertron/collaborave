@@ -1,9 +1,31 @@
 #ToDo:
 ***
-add default: 0 to filter signal path order
 setup pingdom account to keep dynos running
-make basic view to work with
-fix mute/solo buttons - they are f'd up
+
+##Monday
+fix upload
+	make modal forms
+	fix model or controller to generate full path to ftp server
+Align wavforms
+Add versioning
+
+##Tuesday
+Start gui for editing
+	add transport (thin red line) - go to time on click
+	split a region on doubleclick
+	bind dragging to set volume up/down on hover
+	--this will all be way easier if you make a straight-forward method to get time from mouse position
+	----call it getTime, then add gain filter and an automation to the region to set to 0 || 1
+
+##Wednesday
+Finish gui
+
+##Thursday
+add back social elements
+	tighten social elements
+
+##Friday
+design
 
 
 #Notes:
