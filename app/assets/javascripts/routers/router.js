@@ -33,10 +33,11 @@ Collaborave.Routers.Router = Backbone.Router.extend({
 	setupMainFilters: function () {
 
 
-		Collaborave.analyzerctx = $('#analyzer').get()[0].getContext("2d");
+		
 	  
 		//all metering / analyzer functions fired from the main scriptProcessorNode
 		Collaborave.mainMeterNode.onaudioprocess = function() {
+			Collaborave.analyzerctx = $('#analyzer').get()[0].getContext("2d");
 			// get the average, bincount is fftsize / 2
 		  var array =  new Uint8Array(Collaborave.analyzer.frequencyBinCount);
 		  Collaborave.analyzer.getByteFrequencyData(array);

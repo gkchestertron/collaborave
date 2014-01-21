@@ -17,7 +17,7 @@ window.Collaborave = {
       var position = [el.offset().left, el.offset().top];
       return position;
     };
-    new Collaborave.Routers.Router({$rootEl: $("#content")});
+    Collaborave.router = new Collaborave.Routers.Router({$rootEl: $("#content")});
 		Backbone.history.start();
 		Collaborave.masterTrack = context.createGain();
 		Collaborave.masterTrack.gain.value = 1;

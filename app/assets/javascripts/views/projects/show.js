@@ -34,7 +34,7 @@ Collaborave.Views.Project = Backbone.View.extend({
 		var volumectx = this.$el.find('canvas.volume').get()[0].getContext("2d");
 		this.drawTrackVolume(volumectx, 116);
 		return this.$el;
-		testView = this;
+		Collaborave.router.setupMainFilters();
 	},
 	play: function (event) {
 		var button = event.target;
