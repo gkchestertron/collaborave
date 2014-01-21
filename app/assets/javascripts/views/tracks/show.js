@@ -181,5 +181,6 @@ Collaborave.Views.Track = Backbone.View.extend({
   uploadRegion: function (event) {
     var track = this.model
     $('input[name="region[track_id]"]').val(track.id);
+    $('input[name="region_redirect_hash"]').val(location.hash);
   } 
 });
