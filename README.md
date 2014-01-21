@@ -3,9 +3,6 @@
 setup pingdom account to keep dynos running
 
 ##Monday
-fix upload
-	make modal forms
-	fix model or controller to generate full path to ftp server
 Align wavforms
 Add versioning
 
