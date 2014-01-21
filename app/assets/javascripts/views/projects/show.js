@@ -26,7 +26,6 @@ Collaborave.Views.Project = Backbone.View.extend({
 	},
 	muteMonitor: function (event) {
 		event.preventDefault();
-		console.log('button pressed')
 		if (Collaborave.Recorder.monitorGain.gain.value === 0) {
 			Collaborave.Recorder.monitorGain.gain.value = 1;
 		} else {

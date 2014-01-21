@@ -9,7 +9,17 @@ class RegionsController < ApplicationController
 	end
 
 	def create
-    @region = Region.new(region_params)
+    if params[:region]
+      @region = Region.new(region_params)
+    else
+      @region = Region.new
+      @region.track_id = params[:track_id]
+      @region.start_time = params[:start_time]
+      path = params
+      path.delete(:track_id)
+      path.delete(:start_time)
+      @region.path = path[:data]
+    end
     if @region.save
       if params[:filters]
         params[:filters].each do |filter|
@@ -28,7 +38,11 @@ class RegionsController < ApplicationController
           end
         end
       end
-      redirect_to "/#{region_params[:redirect_hash]}"
+      if params[:region]
+        redirect_to "/#{region_params[:redirect_hash]}"
+      else
+        head :ok
+      end
     else
       render json: @region.errors.full_messages, status: 422
     end

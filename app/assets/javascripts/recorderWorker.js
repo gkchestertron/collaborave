@@ -17,6 +17,8 @@ CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFT
 DEALINGS IN THE SOFTWARE.
 */
 
+console.log('in recorder worker')
+
 var recLength = 0,
   recBuffersL = [],
   recBuffersR = [],

@@ -7,10 +7,15 @@ Collaborave.Views.Track = Backbone.View.extend({
 		'mousedown canvas.pan': 'pan',
 		'click button.mute': 'mute',
 		'click button.solo': 'solo',
-    'click button.add-region': 'uploadRegion'
+    'click button.add-region': 'uploadRegion',
+    'click button.record': 'record'
 
 	},
 	template: JST['tracks/show'],
+  record: function (event) {
+    Collaborave.Recorder.trackId = this.model.id;
+    Collaborave.Recorder.toggleRecording(event.target);
+  },
 	render: function () {
 		var trackView = this;
 		var track = this.model;
