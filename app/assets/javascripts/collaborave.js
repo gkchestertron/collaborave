@@ -97,4 +97,42 @@ Collaborave.updateTimer = function (){
   }
 }
 
+Collaborave.Recorder = {};
+
+Collaborave.Recorder.initAudio = function () {
+  if (!navigator.getUserMedia)
+      navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+  if (!navigator.cancelAnimationFrame)
+      navigator.cancelAnimationFrame = navigator.webkitCancelAnimationFrame || navigator.mozCancelAnimationFrame;
+  if (!navigator.requestAnimationFrame)
+      navigator.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame;
+
+  function gotStream(stream) {
+    Collaborave.Recorder.inputPoint = context.createGain();
+
+    // Create an AudioNode from the stream.
+    Collaborave.Recorder.realAudioInput = context.createMediaStreamSource(stream);
+    Collaborave.Recorder.realAudioInput.connect(Collaborave.Recorder.inputPoint);
+
+    //    audioInput = convertToMono( input );
+
+    Collaborave.Recorder.analyserNode = context.createAnalyser();
+    Collaborave.Recorder.analyserNode.fftSize = 2048;
+    Collaborave.Recorder.inputPoint.connect( Collaborave.Recorder.analyserNode );
+
+    // audioRecorder = new Recorder( inputPoint );
+
+    Collaborave.Recorder.monitorGain = context.createGain();
+    Collaborave.Recorder.monitorGain.gain.value = 0;
+    Collaborave.Recorder.inputPoint.connect( Collaborave.Recorder.monitorGain );
+    Collaborave.Recorder.monitorGain.connect( Collaborave.masterTrack );
+    
+}
+
+    navigator.getUserMedia({audio:true}, gotStream, function(e) {
+            alert('Error getting audio');
+            console.log(e);
+        });
+}
+
 

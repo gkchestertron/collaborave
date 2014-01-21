@@ -11,7 +11,8 @@ Collaborave.Views.Project = Backbone.View.extend({
 		'mousedown button#fast-forward': 'fastForward',
 		'mousedown canvas.volume': 'volume',
 		'click button#add-track-button': 'addTrack',
-		'submit form#add-track-form': 'formPrevent'
+		'submit form#add-track-form': 'formPrevent',
+		'click button#mute-monitor': 'muteMonitor'
 	},
 	formPrevent: function (event) {
 		event.preventDefault();
@@ -22,6 +23,15 @@ Collaborave.Views.Project = Backbone.View.extend({
 		var $form = $('#add-track-form')
 		var formData = $form.serializeJSON();
 		this.model.get('tracks').create(formData);
+	},
+	muteMonitor: function (event) {
+		event.preventDefault();
+		console.log('button pressed')
+		if (Collaborave.Recorder.monitorGain.gain.value === 0) {
+			Collaborave.Recorder.monitorGain.gain.value = 1;
+		} else {
+			Collaborave.Recorder.monitorGain.gain.value = 0;
+		} 
 	},
 	render: function () {
 		var projectView = this;

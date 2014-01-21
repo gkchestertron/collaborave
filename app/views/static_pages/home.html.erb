@@ -1,8 +1,33 @@
 <div id="content"></div>
+
+<div class="modal fade" id="myModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Upload New Region</h4>
+          </div>
+          <div class="modal-body">  
+              <%= form_for @region, html: { multipart: true } do |f| %>
+                <%= f.file_field :path %>
+                <%= f.hidden_field :track_id, value: 2 %>
+                <%= f.hidden_field :start_time, value: 0 %>
+                <%= f.hidden_field :redirect_hash, value: "" %>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <%= f.submit "Upload", class: "btn btn-primary" %>
+              <% end %>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    
 <script>
 	$(document).ready(function(){
 	  Collaborave.initialize();
 	  setInterval(Collaborave.updateTimer, 10);
+    Collaborave.Recorder.initAudio();
 	});
 </script>
   
