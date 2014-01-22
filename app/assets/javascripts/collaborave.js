@@ -173,7 +173,11 @@ window.Collaborave = {
         processData: false,
         contentType: false
     }).done(function(data) {
-        console.log('done!');
+      Collaborave.currentProject.fetch({
+        success: function () {
+          Collaborave.currentProject.load();
+        }
+      });
     });
 
   }
