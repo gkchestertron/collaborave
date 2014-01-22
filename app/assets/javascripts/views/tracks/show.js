@@ -12,7 +12,8 @@ Collaborave.Views.Track = Backbone.View.extend({
 		'click button.solo': 'solo',
     'click button.add-region': 'uploadRegion',
     'click button.record': 'record',
-    'click button.delete-track': 'delete'
+    'click button.delete-track': 'delete',
+    'click div.wavforms': 'setTime'
 
 	},
 	template: JST['tracks/show'],
@@ -195,6 +196,12 @@ Collaborave.Views.Track = Backbone.View.extend({
   		
   		$(button).addClass('btn-success');
   	}
+  },
+  setTime: function (event) {
+    var box = event.currentTarget;
+    var pos = Collaborave.getPosition(box);
+    console.log(event.pageX - pos[0]);
+    context.position = ((event.pageX - pos[0])/817) * context.duration;
   },
   uploadRegion: function (event) {
     var track = this.model

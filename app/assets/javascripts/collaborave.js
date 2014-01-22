@@ -220,6 +220,8 @@ Collaborave.updateTimer = function (){
     var zero = places - num.toString().length + 1;
     return Array(+(zero > 0 && zero)).join("0") + num;
   }
+
+  $('.transport').css('left', 817 * (context.position/context.duration));
 }
 
 
