@@ -1,8 +1,5 @@
 Collaborave.Views.Track = Backbone.View.extend({
   initialize: function () {
-    if (this.model.get('regions')) {
-      this.listenTo(this.model.get('regions'), 'change add remove', this.render);
-    }
   },
 	events: {
 		'mousedown canvas.volume': 'volume',

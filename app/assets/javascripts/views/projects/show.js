@@ -35,6 +35,7 @@ Collaborave.Views.Project = Backbone.View.extend({
 		} 
 	},
 	render: function () {
+		Collaborave.currentProjectView = this;
 		var projectView = this;
 		var content = this.template({ project: this.model });
 		this.$el.html(content);

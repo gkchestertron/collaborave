@@ -28,7 +28,7 @@ class TracksController < ApplicationController
           end
         end
       end
-      render :show
+      render json: @track
     else
       render json: @track.errors.full_messages, status: 422
     end

@@ -173,11 +173,7 @@ window.Collaborave = {
         processData: false,
         contentType: false
     }).done(function(data) {
-      Collaborave.currentProject.fetch({
-        success: function () {
-          Collaborave.currentProject.load();
-        }
-      });
+      location.reload();
     });
 
   }
