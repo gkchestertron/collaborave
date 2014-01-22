@@ -56,12 +56,31 @@ Collaborave.Models.Region = Backbone.Model.extend({
 		region.source = context.createBufferSource();
 		region.source.buffer = region.buffer;
 		region.source.connect(track_node);
-		region.source.start(context.currentTime + parseInt(region.get('start_time')) || 0, context.position);
+
+		var startTime = parseFloat(region.get('start_time'));
+		var start = context.currentTime + startTime - context.position; 
+		var offset;
+		if (start + region.buffer.duration <= context.currentTime) {
+			return;
+		} else if (start <= context.currentTime) {			
+			offset = context.position - startTime;
+			region.playing = true;
+			region.source.start(start, offset);
+		} else {
+			offset = context.position;
+			region.playing = true;
+			region.source.start(start, offset);
+		}
+
+		
 		
 	},
 
 	stop: function () {
 		var region = this;
-		region.source.stop(0);
+		if (region.playing) {
+			region.playing = false;
+			region.source.stop(0);
+		}
 	}
 })

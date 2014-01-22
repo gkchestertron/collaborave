@@ -1,5 +1,10 @@
 /* board css */
 
+#add-track {
+  float:right;
+  margin-right: 18px;
+}
+
 #analyzeThis{
   margin:10px;
   padding:10px;
@@ -32,9 +37,10 @@ body {
   background: #eee;
 }
 
-#add-track {
-  float:right;
-  margin-right: 18px;
+.delete-region {
+  position: absolute;
+  right: 5px;
+  top: 5px;
 }
 
 .track {
@@ -118,7 +124,17 @@ body {
 
 }
 
-#track_path {
+.region-div {
+  position: relative;
+  line-height: 0px;
+}
+
+#record.recording { 
+  background: red;
+  background: -webkit-radial-gradient(center, ellipse cover, #ff0000 0%, #fff 75%, #fff 100%, #fff 100%); 
+  }
+
+  #track_path {
   width:180px;
 }
 
@@ -127,10 +143,6 @@ body {
   height:25px;
   background: #eee;
 }
-
-#record.recording { 
-  background: red;
-  background: -webkit-radial-gradient(center, ellipse cover, #ff0000 0%, #fff 75%, #fff 100%, #fff 100%); }
 
 .volume {
   margin:5px;

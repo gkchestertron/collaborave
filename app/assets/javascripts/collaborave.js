@@ -90,7 +90,9 @@ window.Collaborave = {
 
     this.node.onaudioprocess = function(e){
       if (!recording) return;
-
+      if (!Collaborave.Recorder.startTime) {
+        Collaborave.Recorder.startTime = context.position;
+      }
       worker.postMessage({
         command: 'record',
         buffer: [
@@ -112,8 +114,6 @@ window.Collaborave = {
 
     this.record = function(){
       recording = true;
-      Collaborave.Recorder.startTime = context.position;
-
     }
 
     this.stop = function(){
@@ -206,18 +206,7 @@ Collaborave.updateTimer = function (){
   }
   if (context.position != 0) document.getElementById("timer").innerHTML = timerString(context.position); 
   context.position_diff = context.currentTime;
-  // drawSlider(); 
 
-  //draw time slider
-  // function drawSlider(){
-  //   ctxt.clearRect(0, 0, 10, 1000);
-  //       ctxt.fillStyle='#ccc';
-  //       ctxt.fillRect(0,0,duration,6);
-  //       ctxt.fillStyle='#999';
-  //       ctxt.fillRect(0,0,timeoffset,6);
-  // }
-
-  //make string for timer (use floor/rounding and pad with zeros)
   function timerString(time){
     minutes = Math.floor(time/60);
     seconds = Math.floor(time - (minutes*60));
