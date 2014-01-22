@@ -38,11 +38,15 @@ Collaborave.Models.Region = Backbone.Model.extend({
 	  request.onload = function() {
 	    context.decodeAudioData(request.response, function(buffer) {
 	    	//set project duration (eventually will need to adjust for non-full-length regions)
-	    	if (context.duration < buffer.duration) {
-	        context.duration = buffer.duration;
+	    	var regionLength = parseFloat(region.get('start_time')) + buffer.duration;
+	    	if (context.duration < regionLength) {
+	        context.duration = regionLength;
 	      }
 	      region.buffer = buffer;
-	      region.drawBuffer(817, region.height)
+	      Collaborave.loadCount += 1;
+	      if (Collaborave.loadCount === Collaborave.regionCount) {
+	      	Collaborave.currentProjectView.render();
+	      }
 	    });
 	  }
 	  request.send();

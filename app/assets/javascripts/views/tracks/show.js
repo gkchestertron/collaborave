@@ -1,4 +1,9 @@
 Collaborave.Views.Track = Backbone.View.extend({
+  initialize: function () {
+    if (this.model.get('regions')) {
+      this.listenTo(this.model.get('regions'), 'change add remove', this.render);
+    }
+  },
 	events: {
 		'mousedown canvas.volume': 'volume',
 		'mousedown canvas.highs': 'knob',
@@ -8,13 +13,23 @@ Collaborave.Views.Track = Backbone.View.extend({
 		'click button.mute': 'mute',
 		'click button.solo': 'solo',
     'click button.add-region': 'uploadRegion',
-    'click button.record': 'record'
+    'click button.record': 'record',
+    'click button.delete-track': 'delete'
 
 	},
 	template: JST['tracks/show'],
   record: function (event) {
-    Collaborave.Recorder.trackId = this.model.id;
-    Collaborave.Recorder.toggleRecording(event.target);
+    var $button = $(event.target);
+    if ($button.hasClass('btn-danger')) {
+      $button.removeClass('btn-danger')
+      Collaborave.Recorder.trackId = null;
+    } else {
+      Collaborave.Recorder.trackId = this.model.id;
+      $button.addClass('btn-danger');
+    } 
+  },
+  delete: function () {
+    this.model.destroy();
   },
 	render: function () {
 		var trackView = this;

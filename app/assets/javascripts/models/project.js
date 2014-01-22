@@ -1,4 +1,9 @@
 Collaborave.Models.Project = Backbone.Model.extend({
+	initialize: function () {
+		Collaborave.regionCount = 0;
+		Collaborave.loadCount = 0;
+		
+	},
 	urlRoot: '/projects',
 	parse: function (data) {
 		var that = this;
@@ -10,6 +15,9 @@ Collaborave.Models.Project = Backbone.Model.extend({
 	},
 	load: function () {
 		this.get('tracks').each(function (track) {
+			Collaborave.regionCount += track.get('regions').length;
+		});
+		this.get('tracks').each(function (track) {
 			track.load();
 		});
 	},
@@ -20,16 +28,23 @@ Collaborave.Models.Project = Backbone.Model.extend({
 			this.get('tracks').each(function (track) {
 				track.stop();
 			});
+			if (Collaborave.Recorder.trackId) {
+				Collaborave.Recorder.toggleRecording();
+			}
 		}
 	},
 	play: function () {
 		var project = this;
-		if (context.position + (context.currentTime - context.position_diff) > context.duration) {
+		if ((context.position + (context.currentTime - context.position_diff) > context.duration) && (!Collaborave.Recorder.trackId)) {
 			project.stop();
 		}
 		if (!context.playing) {	
 			context.playing = true;
 			// context.position_diff = context.currentTime;
+			if (Collaborave.Recorder.trackId) {
+				Collaborave.Recorder.toggleRecording();
+			}
+			
 			this.get('tracks').each(function (track) {
 				track.play();
 			});
@@ -42,6 +57,9 @@ Collaborave.Models.Project = Backbone.Model.extend({
 		this.get('tracks').each(function (track) {
 			track.stop();
 		});
+		if (Collaborave.Recorder.trackId) {
+				Collaborave.Recorder.toggleRecording();
+			}
 	},
 	fastForward: function () {
 		if (context.position <= context.duration) {

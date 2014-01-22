@@ -50,17 +50,17 @@ window.Collaborave = {
 
     var WORKER_PATH = '/assets/recorderWorker.js';
 
-    Collaborave.Recorder.toggleRecording = function ( e ) {
-      if (e.classList.contains("recording")) {
+    Collaborave.Recorder.toggleRecording = function () {
+      if (Collaborave.Recorder.recording) {
           // stop recording
           audioRecorder.stop();
-          e.classList.remove("recording");
+          Collaborave.Recorder.recording = false;
           audioRecorder.getBuffers(function () { audioRecorder.exportWAV(Collaborave.Recorder.doneEncoding) });
       } else {
           // start recording
           if (!audioRecorder)
               return;
-          e.classList.add("recording");
+          Collaborave.Recorder.recording = true;
           audioRecorder.clear();
 
           audioRecorder.record();
@@ -173,7 +173,7 @@ window.Collaborave = {
         processData: false,
         contentType: false
     }).done(function(data) {
-           console.log(data);
+        console.log('done!');
     });
 
   }
@@ -187,7 +187,7 @@ Collaborave.Recorder = {};
 Collaborave.updateTimer = function (){
 
   //set max time
-  if (context.duration < context.position) {
+  if ((context.duration < context.position) && (!Collaborave.Recorder.trackId)) {
     context.position = context.duration;
     Collaborave.currentProject.pause();
     document.getElementById("timer").innerHTML = timerString(context.position);  

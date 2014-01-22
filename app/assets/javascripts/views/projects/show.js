@@ -1,6 +1,8 @@
 Collaborave.Views.Project = Backbone.View.extend({
 	initialize: function () {
-		this.listenTo(this.model.get('tracks'), 'change add', this.render)
+		var projectView = this;
+		this.listenTo(this.model.get('tracks'), 'change add remove', this.render)
+		Collaborave.currentProjectView = this;
 	},
 	template: JST['projects/show'],
 	events: {

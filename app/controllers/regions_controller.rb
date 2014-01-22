@@ -41,7 +41,7 @@ class RegionsController < ApplicationController
       if params[:region]
         redirect_to "/#{region_params[:redirect_hash]}"
       else
-        head :ok
+        render json: @region
       end
     else
       render json: @region.errors.full_messages, status: 422
