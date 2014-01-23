@@ -1,12 +1,12 @@
 # encoding: utf-8
 CarrierWave.configure do |config|
   config.ftp_host = "s288250878.onlinehome.us"
-  config.ftp_port = 21
+  config.ftp_port = 22
   config.ftp_user = "u53652338-collab"
   config.ftp_passwd = "@1Sauced"
   config.ftp_folder = "/public_html/uploads"
   config.ftp_url = "http://uploads.collaborave.com/public_html/uploads"
-  config.ftp_passive = false # false by default
+  config.ftp_passive = true # false by default
 end
 
 class RegionUploader < CarrierWave::Uploader::Base
