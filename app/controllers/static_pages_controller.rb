@@ -1,4 +1,6 @@
 class StaticPagesController < ApplicationController
+
+
   def home 
     @region = Region.new
     # if signed_in?
