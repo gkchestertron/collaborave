@@ -168,7 +168,8 @@ window.Collaborave = {
         url: '/regions',
         data: params,
         processData: false,
-        contentType: false
+        contentType: false,
+       timeout: 120000 
     }).done(function(data) {
       location.reload();
     });
