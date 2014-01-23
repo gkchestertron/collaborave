@@ -169,7 +169,8 @@ window.Collaborave = {
         data: params,
         processData: false,
         contentType: false,
-       timeout: 120000 
+       timeout: 120000,
+       cache: true 
     }).done(function(data) {
       location.reload();
     });
