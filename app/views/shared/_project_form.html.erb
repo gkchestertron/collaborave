@@ -3,5 +3,6 @@
   <div class="field">
     <%= f.text_field :name, placeholder: "Name your project..." %>
   </div>
+  <input type="hidden" name="project[author_id]" value="<%= current_user.id %>">
   <%= f.submit "Create", class: "btn btn-large btn-primary" %>
 <% end %>

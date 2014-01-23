@@ -6,7 +6,7 @@ class ProjectsController < ApplicationController
     track_params = params[:tracks]
     if @project.save
       save_tracks(track_params, @project) if track_params
-      render :show
+      redirect_to current_user
     else
       render json: @project.errors.full_messages
     end
@@ -15,7 +15,7 @@ class ProjectsController < ApplicationController
 	def destroy
 		@project = Project.find(params[:id])
     @project.destroy
-    head :ok
+   redirect_to current_user
 	end
 
   def index

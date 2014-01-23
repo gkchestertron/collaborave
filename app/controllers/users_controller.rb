@@ -10,7 +10,7 @@ class UsersController < ApplicationController
   def show
 	  @user = User.find(params[:id])
     @projects = @user.projects.paginate(page: params[:page])
-    
+    @new_project = Project.new
     @collab_projects = @user.collab_projects.paginate(page: params[:page])
 
   end

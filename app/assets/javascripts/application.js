@@ -20,6 +20,7 @@
 
 //= require underscore
 //= require backbone
+//= require recorderWorker
 //= require collaborave
 //= require_tree ../templates
 //= require_tree ./models
