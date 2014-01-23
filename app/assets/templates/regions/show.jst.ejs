@@ -1,1 +1,4 @@
-<canvas style="left: <%= offset %>px; position: relative;" width="<%= width %>" height="<%= height %>"></canvas><button class="delete-region btn btn-small btn-danger">delete region</button>
+<canvas style="left: <%= offset %>px; position: relative;" width="<%= width %>" height="<%= height %>"></canvas>
+<% if (window.currentUser && Collaborave.currentProject.get('author_id') === window.currentUser.id) { %>
+	<button class="delete-region btn btn-small btn-danger">delete region</button>
+<% } %>

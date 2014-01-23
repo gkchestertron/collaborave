@@ -110,12 +110,7 @@ body {
   min-height: 1px;
 }
 
-.track-buttons {
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  z-index: 99;
-}
+
 
 .mute {
   
@@ -139,10 +134,53 @@ body {
   width:180px;
 }
 
+.progress {
+  width: 600px;
+  margin: 0 auto;
+  background: #eee;
+}
+
+.progress-container {
+  margin: 0 auto;
+  margin-top: 300px;
+  border: 1px solid #ccc;
+  background: white;
+  padding: 15px;
+  width: 650px;
+}
+
+.progress-bar {
+  background-color: #5bb65b;
+  background-image: -moz-linear-gradient(top, #62c462, #51a351);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#62c462), to(#51a351));
+  background-image: -webkit-linear-gradient(top, #62c462, #51a351);
+  background-image: -o-linear-gradient(top, #62c462, #51a351);
+  background-image: linear-gradient(to bottom, #62c462, #51a351);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FF62C462', endColorstr='#FF51A351', GradientType=0);
+}
+
+.progress-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  background-color: rgba(0,0,0,0.5); /*dim the background*/
+}
+
 .top-white-strip {
   with: 100%;
   height:25px;
   background: #eee;
+}
+
+.track-buttons {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  z-index: 99;
 }
 
 .transport {
@@ -168,3 +206,24 @@ body {
 .wavforms {
   float: left;
 }   
+
+.welcome {
+  margin-top: 25px;
+}
+
+.welcome h3 {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.welcome h4 {
+  float: right;
+}
+
+.create-project-dropdown input {
+  margin: 5px;
+  width: 150px;
+}
+
+

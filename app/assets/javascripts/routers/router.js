@@ -9,7 +9,7 @@ Collaborave.Routers.Router = Backbone.Router.extend({
 	projectShow: function (id) {
 
 		if (!id) {
-			var id = 2;
+			var id = 15;
 		}
 
 		var that = this;

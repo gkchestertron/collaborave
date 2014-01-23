@@ -5,6 +5,7 @@ class UsersController < ApplicationController
 
   def index
     @users = User.paginate(page: params[:page])
+    @new_project = Project.new
   end
 
   def show
@@ -31,6 +32,7 @@ class UsersController < ApplicationController
   end
 
   def edit
+    @new_project = Project.new
   end
 
   def update

@@ -44,7 +44,6 @@ window.Collaborave = {
 		Collaborave.masterTrack.connect(context.destination);
 
     //recorder
-
     var WORKER_PATH = '<%= javascript_path "recorderWorker" %>';
 
     Collaborave.Recorder.toggleRecording = function () {
@@ -64,9 +63,13 @@ window.Collaborave = {
 
       }
     }
+
     Collaborave.Recorder.recIndex = 0;
+
     Collaborave.Recorder.doneEncoding = function ( blob ) {
-      Recorder.forceDownload( blob, "myRecording" + ((Collaborave.Recorder.recIndex<10)?"0":"") + Collaborave.Recorder.recIndex + ".wav" );
+      Recorder.forceDownload( blob, "myRecording" + 
+        ((Collaborave.Recorder.recIndex<10)?"0":"") + 
+        Collaborave.Recorder.recIndex + ".wav" );
       Collaborave.Recorder.recIndex++;
     }
 
@@ -82,6 +85,7 @@ window.Collaborave = {
         sampleRate: this.context.sampleRate
       }
     });
+
     var recording = false,
       currCallback;
 
@@ -97,8 +101,6 @@ window.Collaborave = {
           e.inputBuffer.getChannelData(1)
         ]
       });
-      
-
     }
 
     this.configure = function(cfg){
@@ -183,6 +185,44 @@ window.Collaborave = {
 
 Collaborave.Recorder = {};
 
+
+
+
+
+Collaborave.Recorder.initAudio = function () {
+  if (!navigator.getUserMedia)
+      navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+  if (!navigator.cancelAnimationFrame)
+      navigator.cancelAnimationFrame = navigator.webkitCancelAnimationFrame || navigator.mozCancelAnimationFrame;
+  if (!navigator.requestAnimationFrame)
+      navigator.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame;
+
+  function gotStream(stream) {
+    Collaborave.Recorder.inputPoint = context.createGain();
+
+    // Create an AudioNode from the stream.
+    Collaborave.Recorder.realAudioInput = context.createMediaStreamSource(stream);
+    Collaborave.Recorder.realAudioInput.connect(Collaborave.Recorder.inputPoint);
+
+    Collaborave.Recorder.analyserNode = context.createAnalyser();
+    Collaborave.Recorder.analyserNode.fftSize = 2048;
+    Collaborave.Recorder.inputPoint.connect( Collaborave.Recorder.analyserNode );
+
+    audioRecorder = new Recorder( Collaborave.Recorder.inputPoint );
+
+    Collaborave.Recorder.monitorGain = context.createGain();
+    Collaborave.Recorder.monitorGain.gain.value = 0;
+    Collaborave.Recorder.inputPoint.connect( Collaborave.Recorder.monitorGain );
+    Collaborave.Recorder.monitorGain.connect( Collaborave.masterTrack );
+    
+  }
+
+  navigator.getUserMedia({audio:true}, gotStream, function(e) {
+    alert('Error getting audio');
+    console.log(e);
+  });
+}
+
 Collaborave.updateTimer = function (){
 
   //set max time
@@ -224,44 +264,6 @@ Collaborave.updateTimer = function (){
   if (transportPosition < 817) {
     $('.transport').css('left', transportPosition);
   }
-}
-
-
-
-Collaborave.Recorder.initAudio = function () {
-  if (!navigator.getUserMedia)
-      navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-  if (!navigator.cancelAnimationFrame)
-      navigator.cancelAnimationFrame = navigator.webkitCancelAnimationFrame || navigator.mozCancelAnimationFrame;
-  if (!navigator.requestAnimationFrame)
-      navigator.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame;
-
-  function gotStream(stream) {
-    Collaborave.Recorder.inputPoint = context.createGain();
-
-    // Create an AudioNode from the stream.
-    Collaborave.Recorder.realAudioInput = context.createMediaStreamSource(stream);
-    Collaborave.Recorder.realAudioInput.connect(Collaborave.Recorder.inputPoint);
-
-    //    audioInput = convertToMono( input );
-
-    Collaborave.Recorder.analyserNode = context.createAnalyser();
-    Collaborave.Recorder.analyserNode.fftSize = 2048;
-    Collaborave.Recorder.inputPoint.connect( Collaborave.Recorder.analyserNode );
-
-    audioRecorder = new Recorder( Collaborave.Recorder.inputPoint );
-
-    Collaborave.Recorder.monitorGain = context.createGain();
-    Collaborave.Recorder.monitorGain.gain.value = 0;
-    Collaborave.Recorder.inputPoint.connect( Collaborave.Recorder.monitorGain );
-    Collaborave.Recorder.monitorGain.connect( Collaborave.masterTrack );
-    
-  }
-
-    navigator.getUserMedia({audio:true}, gotStream, function(e) {
-      alert('Error getting audio');
-      console.log(e);
-    });
 }
 
 

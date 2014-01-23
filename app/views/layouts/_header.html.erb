@@ -6,7 +6,25 @@
         <ul class="nav pull-right">
           <li><%= link_to "Home", root_path %></li>
           <% if signed_in? %>
+          <script>
+            window.currentUser = { id: <%= current_user.id %> };  
+          </script>
             <li><%= link_to "Collaboravers", users_path %></li>
+
+            <li id="fat-menu" class="dropdown create-project-dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                + New Project <b class="caret"></b>
+              </a>
+
+              <ul class="dropdown-menu">
+                 <%= form_for(@new_project) do |f| %>
+                <li><%= f.text_field :name, placeholder: "Name your project..." %></li>
+                <input type="hidden" name="project[author_id]" value="<%= current_user.id %>">
+                <li><%= f.submit "Create", class: "btn btn-small btn-primary" %></li>
+              </ul>
+              <% end %>
+            </li>
+
             <li id="fat-menu" class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <%= current_user.name %><b class="caret"></b>
