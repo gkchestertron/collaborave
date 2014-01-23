@@ -45,7 +45,7 @@ window.Collaborave = {
 
     //recorder
 
-    var WORKER_PATH = '/assets/recorderWorker.js';
+    var WORKER_PATH = '<%= javascript_path "recorderWorker" %>';
 
     Collaborave.Recorder.toggleRecording = function () {
       if (Collaborave.Recorder.recording) {
