@@ -1,7 +1,7 @@
 # encoding: utf-8
 CarrierWave.configure do |config|
   config.ftp_host = "s288250878.onlinehome.us"
-  config.ftp_port = 22
+  config.ftp_port = 21
   config.ftp_user = "u53652338-collab"
   config.ftp_passwd = "@1Sauced"
   config.ftp_folder = "/public_html/uploads"
