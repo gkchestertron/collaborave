@@ -60,6 +60,7 @@ Collaborave.Models.Region = Backbone.Model.extend({
     var startTime = parseFloat(region.get('start_time'));
     var start = context.currentTime + startTime - context.position; 
     var offset;
+    
     if (start + region.buffer.duration <= context.currentTime) {
       return;
     } else if (start <= context.currentTime) {                        

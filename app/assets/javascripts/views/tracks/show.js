@@ -20,10 +20,6 @@ Collaborave.Views.Track = Backbone.View.extend({
 
 	},
 	template: JST['tracks/show'],
-  preventTransport: function (event) {
-    event.preventDefault();
-    console.log('preventing default?');
-  },
   record: function (event) {
     var $button = $(event.target);
     if ($button.hasClass('btn-danger')) {

@@ -11,7 +11,7 @@ Collaborave.Views.Project = Backbone.View.extend({
 		'click button.pause': 'pause',
 		'mousedown button#rewind': 'rewind',
 		'mousedown button#fast-forward': 'fastForward',
-		'mousedown canvas.volume': 'volume',
+		'mousedown canvas.master-volume': 'volume',
 		'click button#add-track-button': 'addTrack',
 		'submit form#add-track-form': 'formPrevent',
 		'click button#mute-monitor': 'muteMonitor'
