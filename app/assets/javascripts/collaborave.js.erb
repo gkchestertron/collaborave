@@ -158,6 +158,13 @@ window.Collaborave = {
   };
 
   Recorder.forceDownload = function(blob, filename){
+    $('#upload-overlay').css('display', 'inline');
+    var progress = 10;
+    setTimeout(function () {
+      progress += 10;
+      $('#upload-overlay').find('.progress-bar').css('width', progress + '%');
+       
+    }, 500);
     var params = new FormData();
     Collaborave.testBlob = blob;
     params.append('file_name', filename);
@@ -186,9 +193,6 @@ window.Collaborave = {
 Collaborave.Recorder = {};
 
 
-
-
-
 Collaborave.Recorder.initAudio = function () {
   if (!navigator.getUserMedia)
       navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
@@ -198,6 +202,7 @@ Collaborave.Recorder.initAudio = function () {
       navigator.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame;
 
   function gotStream(stream) {
+    Collaborave.recordable = true;
     Collaborave.Recorder.inputPoint = context.createGain();
 
     // Create an AudioNode from the stream.
@@ -216,8 +221,9 @@ Collaborave.Recorder.initAudio = function () {
     Collaborave.Recorder.monitorGain.connect( Collaborave.masterTrack );
     
   }
-
+  
   navigator.getUserMedia({audio:true}, gotStream, function(e) {
+    Collaborave.recordable = false;
     alert('Error getting audio');
     console.log(e);
   });

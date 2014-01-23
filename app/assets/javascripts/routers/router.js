@@ -9,6 +9,7 @@ Collaborave.Routers.Router = Backbone.Router.extend({
 	projectShow: function (id) {
 
 		if (!id) {
+			//set default to 2 for heroku 15 for local
 			var id = 2;
 		}
 

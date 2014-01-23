@@ -21,13 +21,16 @@ Collaborave.Views.Track = Backbone.View.extend({
 	},
 	template: JST['tracks/show'],
   record: function (event) {
-    var $button = $(event.target);
-    if ($button.hasClass('btn-danger')) {
-      $button.removeClass('btn-danger')
-      Collaborave.Recorder.trackId = null;
-    } else {
-      Collaborave.Recorder.trackId = this.model.id;
-      $button.addClass('btn-danger');
+    if (Collaborave.recordable) {  
+      var $button = $(event.target);
+      if ($button.hasClass('btn-danger')) {
+        $button.removeClass('btn-danger')
+        Collaborave.Recorder.trackId = null;
+      } else {
+        $('.record').removeClass('btn-danger');
+        Collaborave.Recorder.trackId = this.model.id;
+        $button.addClass('btn-danger');
+      }
     } 
   },
   delete: function () {

@@ -40,14 +40,13 @@ Collaborave.Models.Region = Backbone.Model.extend({
 	      }
 	      region.buffer = buffer;
 	      Collaborave.loadCount += 1;
-	      $('.progress-bar').css('width', 100 * Collaborave.loadCount/Collaborave.regionCount + '%');
-	      console.log('in region loader')
+	      $('#download-overlay').find('.progress-bar').css('width', 100 * Collaborave.loadCount/Collaborave.regionCount + '%');
 	      
 	      if (Collaborave.loadCount === Collaborave.regionCount) {
 	      	Collaborave.currentProjectView.render();
 	      	setTimeout(function () {
-	      		$('.progress-overlay').fadeOut('slow');
-	      	}, 500);
+	      		$('#download-overlay').fadeOut('slow');
+	      	}, 1000);
 	      	
 	      }
 	    });

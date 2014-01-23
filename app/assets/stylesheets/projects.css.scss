@@ -44,6 +44,10 @@ body {
   z-index: 98;
 }
 
+#download-overlay {
+
+}
+
 .track {
   margin:10px;
   border: 1px solid #ccc;
@@ -197,6 +201,10 @@ body {
   width: 817px;
   height: 200px;
   z-index: 97;
+}
+
+#upload-overlay {
+  display: none;
 }
 
 .volume {
