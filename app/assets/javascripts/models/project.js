@@ -2,7 +2,10 @@ Collaborave.Models.Project = Backbone.Model.extend({
 	initialize: function () {
 		Collaborave.regionCount = 0;
 		Collaborave.loadCount = 0;
-		
+		//need to initialize with a collection
+		// if (!this.get('tracks')) {
+		// 	this.set('tracks', new Collaborave.Collections.Tracks({name:"track 1"}, {parent: this}));
+		// }
 	},
 	urlRoot: '/projects',
 	parse: function (data) {
@@ -51,15 +54,16 @@ Collaborave.Models.Project = Backbone.Model.extend({
 		}
 	},
 	stop: function () {
+		if (Collaborave.Recorder.trackId) {
+				Collaborave.Recorder.toggleRecording();
+			}
 		context.playing = false;
 		context.position = 0;
 		document.getElementById("timer").innerHTML = '00:00.00';   
 		this.get('tracks').each(function (track) {
 			track.stop();
 		});
-		if (Collaborave.Recorder.trackId) {
-				Collaborave.Recorder.toggleRecording();
-			}
+		
 	},
 	fastForward: function () {
 		if (context.position <= context.duration) {

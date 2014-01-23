@@ -41,6 +41,7 @@ body {
   position: absolute;
   right: 5px;
   top: 5px;
+  z-index: 98;
 }
 
 .track {
@@ -151,6 +152,13 @@ body {
   background: red;
   position: absolute;
   z-index: 98;
+}
+
+.transport-container {
+  position: absolute;
+  width: 817px;
+  height: 200px;
+  z-index: 97;
 }
 
 .volume {

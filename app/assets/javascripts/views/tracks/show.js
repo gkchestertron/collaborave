@@ -1,6 +1,8 @@
 Collaborave.Views.Track = Backbone.View.extend({
   initialize: function () {
-    this.listenTo(this.model.get('regions'), 'add remove change', this.render)
+    if (this.model.get('regions')) {
+      this.listenTo(this.model.get('regions'), 'add remove change', this.render)
+    }
   },
 	events: {
 		'mousedown canvas.volume': 'volume',
@@ -13,10 +15,15 @@ Collaborave.Views.Track = Backbone.View.extend({
     'click button.add-region': 'uploadRegion',
     'click button.record': 'record',
     'click button.delete-track': 'delete',
-    'click div.wavforms': 'setTime'
+    'click div.transport-container': 'setTime',
+    'click div.track-buttons': 'preventTransport'
 
 	},
 	template: JST['tracks/show'],
+  preventTransport: function (event) {
+    event.preventDefault();
+    console.log('preventing default?');
+  },
   record: function (event) {
     var $button = $(event.target);
     if ($button.hasClass('btn-danger')) {
@@ -200,12 +207,18 @@ Collaborave.Views.Track = Backbone.View.extend({
   setTime: function (event) {
     var box = event.currentTarget;
     var pos = Collaborave.getPosition(box);
-    console.log(event.pageX - pos[0]);
     context.position = ((event.pageX - pos[0])/817) * context.duration;
+    if (!context.playing) {
+      Collaborave.currentProject.pause();
+    } else {
+      Collaborave.currentProject.pause();
+      Collaborave.currentProject.play();
+    }
   },
   uploadRegion: function (event) {
     var track = this.model
     $('input[name="region[track_id]"]').val(track.id);
     $('input[name="region_redirect_hash"]').val(location.hash);
+    this.render;
   } 
 });

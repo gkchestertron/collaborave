@@ -64,7 +64,6 @@ Collaborave.Views.Project = Backbone.View.extend({
 		$button.removeClass('pause');
 		$button.removeClass('btn-primary');
 		$button.text('play');
-		this.model.pause.bind(this.model)();
 		this.model.stop.bind(this.model)();
 	},
 	rewind: function () {

@@ -4,9 +4,6 @@ context.position = 0;
 context.position_diff = 0;
 context.duration = 0;
 
-
-
-
 window.Collaborave = {
   Models: {},
   Collections: {},
@@ -220,8 +217,11 @@ Collaborave.updateTimer = function (){
     var zero = places - num.toString().length + 1;
     return Array(+(zero > 0 && zero)).join("0") + num;
   }
-
-  $('.transport').css('left', 817 * (context.position/context.duration));
+  //move transport
+  var transportPosition = 817 * (context.position/context.duration);
+  if (transportPosition < 817) {
+    $('.transport').css('left', transportPosition);
+  }
 }
 
 
@@ -254,12 +254,12 @@ Collaborave.Recorder.initAudio = function () {
     Collaborave.Recorder.inputPoint.connect( Collaborave.Recorder.monitorGain );
     Collaborave.Recorder.monitorGain.connect( Collaborave.masterTrack );
     
-}
+  }
 
     navigator.getUserMedia({audio:true}, gotStream, function(e) {
-            alert('Error getting audio');
-            console.log(e);
-        });
+      alert('Error getting audio');
+      console.log(e);
+    });
 }
 
 
