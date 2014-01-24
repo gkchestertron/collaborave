@@ -13,3 +13,11 @@ The mixing features are simple audio nodes from the web audio api. The controls 
 ##Social
 ***
 This app is intended for collaboration. I'm almost done with versioning and comments/notes and adding collaborator users to each project. It's just about ready, but again I only had two weeks.
+
+##Backbone
+***
+The structure of Collaborave relies heavily on backbone for the passing of objects/data back and forth - some parts of the api are very messy and need some refactoring. Also, it is by no means a one-page app. I mostly used backbone for handling the massive amounts of ajax calls necessary for fetching and updating projects and their nested objects (tracks, regions, filters, and filter automations).
+
+##Versioning
+***
+I also built that back-end for versioning of projects. Each version has associated track and region diffs that will be used to change filter and filter automation settings so that multiple users can work on the same project, create different versions and share their ideas without permanently altering the actual project.
