@@ -25,6 +25,7 @@ Collaborave.Views.Project = Backbone.View.extend({
 		var $form = $('#add-track-form')
 		var formData = $form.serializeJSON();
 		this.model.get('tracks').create(formData);
+		window.setTimeout(this.showHeaderZ, 500);
 	},
 
 	drawTrackVolume: function (ctx, value){
@@ -47,6 +48,7 @@ Collaborave.Views.Project = Backbone.View.extend({
 
 	hideHeaderZ: function () {
 		$('.navbar-fixed-top').css('z-index', '0');
+		console.log('hiding')
 	},
 
 	muteMonitor: function (event) {
@@ -93,9 +95,15 @@ Collaborave.Views.Project = Backbone.View.extend({
 		Collaborave.router.setupMainFilters();
 	},
 	
+	rewind: function () {
+		var project = this.model;
+		var down = setInterval(function () { project.rewind.bind(project)() }, 100);
+		$(window).on('mouseup', function () { clearInterval(down) });
+	},
 
 	showHeaderZ: function () {
 		$('.navbar-fixed-top').css('z-index', '9999');
+		console.log('showing')
 	},
 
 	stop: function () {
@@ -106,12 +114,6 @@ Collaborave.Views.Project = Backbone.View.extend({
 		$button.removeClass('btn-primary');
 		$button.text('play');
 		this.model.stop.bind(this.model)();
-	},
-	
-	rewind: function () {
-		var project = this.model;
-		var down = setInterval(function () { project.rewind.bind(project)() }, 100);
-		$(window).on('mouseup', function () { clearInterval(down) });
 	},
 	
   template: JST['projects/show'],
