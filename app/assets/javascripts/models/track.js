@@ -79,7 +79,7 @@ Collaborave.Models.Track = Backbone.Model.extend({
 		var volume = new Collaborave.Models.Filter({
 			name: 'volume',
 			filter_type: 'createGain',
-			settings: JSON.stringify({gain: { value: 1 }})
+			settings: JSON.stringify({gain: { value: 0.5 }})
 		});	
 		this.set('filters', new Collaborave.Collections.Filters(volume, {parent: track}));
 		this.get('filters').add({
