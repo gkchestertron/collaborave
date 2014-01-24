@@ -4,7 +4,7 @@ Collaborave.Views.Project = Backbone.View.extend({
 		this.listenTo(this.model.get('tracks'), 'change add remove', this.render)
 		Collaborave.currentProjectView = this;
 	},
-	template: JST['projects/show'],
+	
 	events: {
 		'click button#stop': 'stop',
 		'click button.play': 'play',
@@ -16,17 +16,9 @@ Collaborave.Views.Project = Backbone.View.extend({
 		'click button#add-track-button': 'addTrack',
 		'submit form#add-track-form': 'formPrevent',
 		'click button#mute-monitor': 'muteMonitor',
-		'hidden .modal': 'changeHeaderZ'
+		'hidden .modal': 'showHeaderZ'
 	},
-	hideHeaderZ: function () {
-		$('.navbar-fixed-top').css('z-index', '0');
-	},
-	changeHeaderZ: function () {
-		$('.navbar-fixed-top').css('z-index', '9999');
-	},
-	formPrevent: function (event) {
-		event.preventDefault();
-	},
+
 	addTrack: function (event) {
 		event.preventDefault();
 		var projectView = this;
@@ -34,6 +26,29 @@ Collaborave.Views.Project = Backbone.View.extend({
 		var formData = $form.serializeJSON();
 		this.model.get('tracks').create(formData);
 	},
+
+	drawTrackVolume: function (ctx, value){
+    ctx.clearRect(0, 0, 20, 252);
+    ctx.fillStyle='#999';
+    ctx.fillRect(0,0,20,252);
+    ctx.fillStyle='#ccc';
+    ctx.fillRect(0,0,20,value);
+  },
+
+  fastForward: function () {
+		var project = this.model;
+		var down = setInterval(function () { project.fastForward.bind(project)() }, 100);
+		$(window).on('mouseup', function () { clearInterval(down) });
+	},
+
+	formPrevent: function (event) {
+		event.preventDefault();
+	},
+
+	hideHeaderZ: function () {
+		$('.navbar-fixed-top').css('z-index', '0');
+	},
+
 	muteMonitor: function (event) {
 		event.preventDefault();
 		if (Collaborave.Recorder.monitorGain.gain.value === 0) {
@@ -42,6 +57,27 @@ Collaborave.Views.Project = Backbone.View.extend({
 			Collaborave.Recorder.monitorGain.gain.value = 0;
 		} 
 	},
+
+	pause: function (event) {
+		var button = event.target;
+		$(button).addClass('play');
+		$(button).addClass('btn-success');
+		$(button).removeClass('pause');
+		$(button).removeClass('btn-primary');
+		$(button).text('play');
+		this.model.pause.bind(this.model)();
+	},
+
+	play: function (event) {
+		var button = event.target;
+		$(button).removeClass('play');
+		$(button).removeClass('btn-success');
+		$(button).addClass('pause');
+		$(button).addClass('btn-primary');
+		$(button).text('pause');
+		this.model.play.bind(this.model)();
+	},
+
 	render: function () {
 		Collaborave.currentProjectView = this;
 		var projectView = this;
@@ -56,15 +92,12 @@ Collaborave.Views.Project = Backbone.View.extend({
 		return this.$el;
 		Collaborave.router.setupMainFilters();
 	},
-	play: function (event) {
-		var button = event.target;
-		$(button).removeClass('play');
-		$(button).removeClass('btn-success');
-		$(button).addClass('pause');
-		$(button).addClass('btn-primary');
-		$(button).text('pause');
-		this.model.play.bind(this.model)();
+	
+
+	showHeaderZ: function () {
+		$('.navbar-fixed-top').css('z-index', '9999');
 	},
+
 	stop: function () {
 		var $button = $('button.pause');
 		$button.addClass('play');
@@ -74,32 +107,15 @@ Collaborave.Views.Project = Backbone.View.extend({
 		$button.text('play');
 		this.model.stop.bind(this.model)();
 	},
+	
 	rewind: function () {
 		var project = this.model;
 		var down = setInterval(function () { project.rewind.bind(project)() }, 100);
 		$(window).on('mouseup', function () { clearInterval(down) });
 	},
-	fastForward: function () {
-		var project = this.model;
-		var down = setInterval(function () { project.fastForward.bind(project)() }, 100);
-		$(window).on('mouseup', function () { clearInterval(down) });
-	},
-	pause: function (event) {
-		var button = event.target;
-		$(button).addClass('play');
-		$(button).addClass('btn-success');
-		$(button).removeClass('pause');
-		$(button).removeClass('btn-primary');
-		$(button).text('play');
-		this.model.pause.bind(this.model)();
-	},
-	drawTrackVolume: function (ctx, value){
-    ctx.clearRect(0, 0, 20, 252);
-    ctx.fillStyle='#999';
-    ctx.fillRect(0,0,20,252);
-    ctx.fillStyle='#ccc';
-    ctx.fillRect(0,0,20,value);
-  },
+	
+  template: JST['projects/show'],
+
   volume: function (event) {
 		event.preventDefault();
 		var trackView = this;

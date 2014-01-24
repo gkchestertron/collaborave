@@ -10,11 +10,6 @@ window.Collaborave = {
   Views: {},
   Routers: {},
   initialize: function() {
-    Collaborave.getPosition = function (element){
-      var el = $(element);
-      var position = [el.offset().left, el.offset().top];
-      return position;
-    };
     Collaborave.router = new Collaborave.Routers.Router({$rootEl: $("#content")});
 		Backbone.history.start();
 
@@ -43,6 +38,12 @@ window.Collaborave = {
 		Collaborave.mainMeter.connect(Collaborave.mainMeterNode);
 		Collaborave.masterTrack.connect(context.destination);
 
+    Collaborave.getPosition = function (element){
+      var el = $(element);
+      var position = [el.offset().left, el.offset().top];
+      return position;
+    };
+
     //recorder
     var WORKER_PATH = '<%= javascript_path "recorderWorker" %>';
 
@@ -58,16 +59,14 @@ window.Collaborave = {
               return;
           Collaborave.Recorder.recording = true;
           audioRecorder.clear();
-
           audioRecorder.record();
-
       }
     }
 
     Collaborave.Recorder.recIndex = 0;
 
     Collaborave.Recorder.doneEncoding = function ( blob ) {
-      Recorder.forceDownload( blob, "myRecording" + 
+      Recorder.upload( blob, "myRecording" + 
         ((Collaborave.Recorder.recIndex<10)?"0":"") + 
         Collaborave.Recorder.recIndex + ".wav" );
       Collaborave.Recorder.recIndex++;
@@ -157,22 +156,38 @@ window.Collaborave = {
     this.node.connect(this.context.destination);    //this should not be necessary
   };
 
-  Recorder.forceDownload = function(blob, filename){
-    $('#upload-overlay').css('display', 'inline');
-    $('.progress-bar').css('width', '10%');
-    var progress = 10;
-    window.pInterval = window.setInterval(function () {
-      progress += 1;
-      $('.progress-bar').css('width', progress + '%');
-       
-    }, 100);
+  Recorder.upload = function(blob, filename){
     var params = new FormData();
     Collaborave.testBlob = blob;
     params.append('file_name', filename);
     params.append('data', blob);
     params.append('track_id', Collaborave.Recorder.trackId);
     params.append('start_time', Collaborave.Recorder.startTime);
- 
+    var region;
+    var reader = new FileReader();
+    var arrayBuffer;
+    reader.onload = function(e) {
+      arrayBuffer = e.target.result;
+
+      context.decodeAudioData(arrayBuffer, function(buffer) {
+        //set project duration 
+        var regionLength = parseFloat(Collaborave.Recorder.startTime) + buffer.duration;
+        if (context.duration < regionLength) {
+          context.duration = regionLength;
+        }
+        region = new Collaborave.Models.Region({
+          start_time: Collaborave.Recorder.startTime, 
+          track_id: Collaborave.Recorder.trackId,
+          
+        });
+        region.buffer = buffer;
+        Collaborave.currentProject.get('tracks').get(Collaborave.Recorder.trackId).get('regions').add(region);
+        $('#upload-overlay').fadeOut('fast');
+        Collaborave.Recorder.trackId = null;   
+      });
+    } 
+    reader.readAsArrayBuffer(blob);
+
     $.ajax({
         type: 'POST',
         url: '/regions',
@@ -182,35 +197,9 @@ window.Collaborave = {
        timeout: 120000,
        cache: true 
     }).done(function(data) {
-      //region not being able to be destroyed presumeably because it doesn't get an id here
-      console.log(data);
-      var reader = new FileReader();
-      var arrayBuffer;
-      reader.onload = function(e) {
-        arrayBuffer = e.target.result;
-
-        context.decodeAudioData(arrayBuffer, function(buffer) {
-          //set project duration 
-          var regionLength = parseFloat(Collaborave.Recorder.startTime) + buffer.duration;
-          if (context.duration < regionLength) {
-            context.duration = regionLength;
-          }
-          var region = new Collaborave.Models.Region({
-            start_time: Collaborave.Recorder.startTime, 
-            track_id: Collaborave.Recorder.trackId,
-            id: data.id
-          });
-          region.buffer = buffer;
-          Collaborave.currentProject.get('tracks').get(Collaborave.Recorder.trackId).get('regions').add(region);
-          $('#upload-overlay').fadeOut('fast');
-          Collaborave.Recorder.trackId = null;   
-          window.clearInterval(window.pInterval); 
-        });
-      } 
-      reader.readAsArrayBuffer(blob);
-      
+      region.set('id', data.id);
+      console.log('region uploaded!');
     });
-
   }
 
   window.Recorder = Recorder;
