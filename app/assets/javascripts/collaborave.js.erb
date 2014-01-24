@@ -159,12 +159,13 @@ window.Collaborave = {
 
   Recorder.forceDownload = function(blob, filename){
     $('#upload-overlay').css('display', 'inline');
+    $('.progress-bar').css('width', '10%');
     var progress = 10;
-    setInterval(function () {
-      progress += 10;
-      $('#upload-overlay').find('.progress-bar').css('width', progress + '%');
+    window.pInterval = window.setInterval(function () {
+      progress += 1;
+      $('.progress-bar').css('width', progress + '%');
        
-    }, 500);
+    }, 100);
     var params = new FormData();
     Collaborave.testBlob = blob;
     params.append('file_name', filename);
@@ -199,7 +200,8 @@ window.Collaborave = {
           region.buffer = buffer;
           Collaborave.currentProject.get('tracks').get(Collaborave.Recorder.trackId).get('regions').add(region);
           $('#upload-overlay').fadeOut('fast');
-            Collaborave.Recorder.trackId = null;    
+          Collaborave.Recorder.trackId = null;   
+          window.clearInterval(window.pInterval); 
         });
       } 
       reader.readAsArrayBuffer(blob);

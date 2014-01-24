@@ -64,9 +64,11 @@ Collaborave.Models.Track = Backbone.Model.extend({
 	},
 	play: function () {
 		var track = this;
-		this.get('regions').each(function (region) {
-			region.play(track.signal_path[0]);
-		});
+		if (track.get('regions')) {
+			this.get('regions').each(function (region) {
+				region.play(track.signal_path[0]);
+			});
+		}
 	},
 	stop: function () {
 		this.get('regions').each(function (region) {
