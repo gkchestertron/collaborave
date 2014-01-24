@@ -20,6 +20,12 @@ Collaborave.Models.Project = Backbone.Model.extend({
 		this.get('tracks').each(function (track) {
 			Collaborave.regionCount += track.get('regions').length;
 		});
+
+		if (Collaborave.regionCount === 0) {
+    	setTimeout(function () {
+    		$('#download-overlay').fadeOut('slow');
+    	}, 1000);	
+    }
 		this.get('tracks').each(function (track) {
 			track.load();
 		});
