@@ -12,9 +12,17 @@ Collaborave.Views.Project = Backbone.View.extend({
 		'mousedown button#rewind': 'rewind',
 		'mousedown button#fast-forward': 'fastForward',
 		'mousedown canvas.master-volume': 'volume',
+		'click button#add-track': 'hideHeaderZ',
 		'click button#add-track-button': 'addTrack',
 		'submit form#add-track-form': 'formPrevent',
-		'click button#mute-monitor': 'muteMonitor'
+		'click button#mute-monitor': 'muteMonitor',
+		'hidden .modal': 'changeHeaderZ'
+	},
+	hideHeaderZ: function () {
+		$('.navbar-fixed-top').css('z-index', '0');
+	},
+	changeHeaderZ: function () {
+		$('.navbar-fixed-top').css('z-index', '9999');
 	},
 	formPrevent: function (event) {
 		event.preventDefault();
