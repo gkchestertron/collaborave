@@ -50,6 +50,7 @@ class RegionsController < ApplicationController
 
   def destroy
     @region = Region.find(params[:id])
+    @region.remove_path!
     @region.destroy
     head :ok
   end
