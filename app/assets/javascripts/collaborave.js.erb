@@ -182,6 +182,26 @@ window.Collaborave = {
        cache: true 
     }).done(function(data) {
       location.reload();
+
+      //this is where we would add the functionality to not reload and just add region
+
+      //all this needs is to correctly get the audio buffer--i think
+      // context.decodeAudioData(arrayBuffer, function(buffer) {
+      //   //set project duration 
+      //   var regionLength = parseFloat(Collaborave.Recorder.startTime) + buffer.duration;
+      //   if (context.duration < regionLength) {
+      //     context.duration = regionLength;
+      //   }
+      //   var region = new Collaborave.Models.Region({
+      //     start_time: Collaborave.Recorder.startTime, 
+      //     track_id: Collaborave.Recorder.trackId
+      //   });
+      //   region.buffer = buffer;
+      //   Collaborave.currentProject.get('tracks').get(Collaborave.Recorder.trackId).get('regions').add(region);
+
+      //   Collaborave.currentProject.render();
+      // });
+      
     });
 
   }
