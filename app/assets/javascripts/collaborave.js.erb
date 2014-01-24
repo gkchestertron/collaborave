@@ -163,7 +163,7 @@ window.Collaborave = {
     params.append('data', blob);
     params.append('track_id', Collaborave.Recorder.trackId);
     params.append('start_time', Collaborave.Recorder.startTime);
-    Collaborave.Recorder.startTime = null;
+
     var region;
     var reader = new FileReader();
     var arrayBuffer;
@@ -184,6 +184,7 @@ window.Collaborave = {
         region.buffer = buffer;
         Collaborave.currentProject.get('tracks').get(Collaborave.Recorder.trackId).get('regions').add(region);
         $('#upload-overlay').fadeOut('fast');
+        Collaborave.Recorder.startTime = null;
         Collaborave.Recorder.trackId = null;   
       });
     } 
