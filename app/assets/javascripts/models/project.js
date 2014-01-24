@@ -31,15 +31,18 @@ Collaborave.Models.Project = Backbone.Model.extend({
 		});
 	},
 	pause: function () {
+		$('.record').removeClass('btn-danger');
 		if (context.playing) {
-			context.playing = false;
 			
+			if (Collaborave.Recorder.trackId && context.playing) {
+				Collaborave.Recorder.toggleRecording();
+			}
+			context.playing = false;
 			this.get('tracks').each(function (track) {
 				track.stop();
 			});
-			if (Collaborave.Recorder.trackId) {
-				Collaborave.Recorder.toggleRecording();
-			}
+			
+			
 		}
 	},
 	play: function () {
@@ -60,9 +63,13 @@ Collaborave.Models.Project = Backbone.Model.extend({
 		}
 	},
 	stop: function () {
-		if (Collaborave.Recorder.trackId) {
+		$('.record').removeClass('btn-danger');
+		if (Collaborave.Recorder.trackId && context.playing) {
 				Collaborave.Recorder.toggleRecording();
+			} else {
+				Collaborave.Recorder.trackId = null;	
 			}
+	
 		context.playing = false;
 		context.position = 0;
 		document.getElementById("timer").innerHTML = '00:00.00';   

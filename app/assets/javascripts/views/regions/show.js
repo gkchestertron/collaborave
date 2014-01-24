@@ -7,6 +7,9 @@ Collaborave.Views.Region = Backbone.View.extend({
 		}
 	},
 	delete: function () {
+		if (context.playing) {
+      Collaborave.currentProject.pause();
+    }
 		this.model.destroy();
 	},
 	events: {
