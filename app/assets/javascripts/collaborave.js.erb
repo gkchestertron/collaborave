@@ -163,6 +163,7 @@ window.Collaborave = {
     params.append('data', blob);
     params.append('track_id', Collaborave.Recorder.trackId);
     params.append('start_time', Collaborave.Recorder.startTime);
+    Collaborave.Recorder.startTime = null;
     var region;
     var reader = new FileReader();
     var arrayBuffer;
