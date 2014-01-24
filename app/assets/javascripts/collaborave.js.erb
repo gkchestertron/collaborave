@@ -182,6 +182,8 @@ window.Collaborave = {
        timeout: 120000,
        cache: true 
     }).done(function(data) {
+      //region not being able to be destroyed presumeably because it doesn't get an id here
+      console.log(data);
       var reader = new FileReader();
       var arrayBuffer;
       reader.onload = function(e) {
@@ -195,7 +197,8 @@ window.Collaborave = {
           }
           var region = new Collaborave.Models.Region({
             start_time: Collaborave.Recorder.startTime, 
-            track_id: Collaborave.Recorder.trackId
+            track_id: Collaborave.Recorder.trackId,
+            id: data.id
           });
           region.buffer = buffer;
           Collaborave.currentProject.get('tracks').get(Collaborave.Recorder.trackId).get('regions').add(region);
