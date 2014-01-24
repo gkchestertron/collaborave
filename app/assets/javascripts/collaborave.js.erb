@@ -160,7 +160,7 @@ window.Collaborave = {
   Recorder.forceDownload = function(blob, filename){
     $('#upload-overlay').css('display', 'inline');
     var progress = 10;
-    setTimeout(function () {
+    setInterval(function () {
       progress += 10;
       $('#upload-overlay').find('.progress-bar').css('width', progress + '%');
        
