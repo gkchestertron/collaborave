@@ -1,9 +1,36 @@
 Collaborave.Views.Track = Backbone.View.extend({
   initialize: function () {
     if (this.model.get('regions')) {
-      this.listenTo(this.model.get('regions'), 'add remove change', this.render)
+      this.listenTo(this.model.get('regions'), 'remove change', this.render)
+      this.listenTo(this.model.get('regions'), 'add', this.fadeRender)
     }
   },
+
+  fadeRender: function () {
+    var trackView = this;
+    var track = this.model;
+    var content = this.template({track: this.model});
+    this.$el.html(content);
+    if (this.model.get('regions')) {
+      this.model.get('regions').each(function (region) {
+        var regionView = new Collaborave.Views.Region({model: region, height: 198/track.get('regions').length});
+        trackView.$el.find('.wavforms').append(regionView.render().fadeIn('fast'));
+      });
+    }
+
+    var volumectx = this.$el.find('canvas.volume').get()[0].getContext("2d");
+    this.drawTrackVolume(volumectx, 65);
+    var highsctx = this.$el.find('canvas.highs').get()[0].getContext("2d");
+    this.drawKnob(highsctx, 30, 'highs');
+    var highsctx = this.$el.find('canvas.mids').get()[0].getContext("2d");
+    this.drawKnob(highsctx, 30, 'mids');
+    var highsctx = this.$el.find('canvas.lows').get()[0].getContext("2d");
+    this.drawKnob(highsctx, 30, 'lows');
+    var highsctx = this.$el.find('canvas.pan').get()[0].getContext("2d");
+    this.drawKnob(highsctx, 30, 'pan');
+    return this.$el
+  },
+
 	events: {
 		'mousedown canvas.volume': 'volume',
 		'mousedown canvas.highs': 'knob',

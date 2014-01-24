@@ -26,6 +26,9 @@ Collaborave.Views.Region = Backbone.View.extend({
 		if (this.model.buffer) {
 			this.model.drawBuffer(this.width, this.height, this.offset);
 		}
+		if (!this.model.id) {
+			this.$el.find('button.delete-region').attr('disabled', 'disabled');
+		}
 		this.model.height = this.height;
 		return this.$el
 	}	
