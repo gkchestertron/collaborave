@@ -189,23 +189,26 @@ window.Collaborave = {
       });
     } 
     reader.readAsArrayBuffer(blob);
-
-    $.ajax({
+    
+    var uploadRecording = function () {
+      var uploadCall = $.ajax({
         type: 'POST',
         url: '/regions',
         data: params,
         processData: false,
         contentType: false,
-       timeout: 120000,
-       cache: true, 
-       error: function () {
+        timeout: 120000,
+        cache: true, 
+      }).done(function(data) {
+        region.set('id', data.id);
+      });
+
+      uploadCall.error(function() {
         var url = (window.URL || window.webkitURL).createObjectURL(blob);
         $('#mixer').append('<a href="'+ url + '" download>The region you recorded failed to upload. Click this link to download and save it for later</a>');
-       }
-    }).done(function(data) {
-      region.set('id', data.id);
-      console.log('region uploaded!');
-    });
+        uploadRecording();
+      });
+    }
   }
 
   window.Recorder = Recorder;
