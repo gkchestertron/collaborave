@@ -195,7 +195,11 @@ window.Collaborave = {
         processData: false,
         contentType: false,
        timeout: 120000,
-       cache: true 
+       cache: true, 
+       error: function () {
+        var url = (window.URL || window.webkitURL).createObjectURL(blob);
+        $('#mixer').append('<a href="'+ url + '" download>The region you recorded failed to upload. Click this link to download and save it for later</a>');
+       }
     }).done(function(data) {
       region.set('id', data.id);
       console.log('region uploaded!');
