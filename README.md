@@ -2,6 +2,8 @@
 ###Collaborave is an online recording/mixing app for music collaboration
 I relied heavily on the mixer.js chrome experiment by Kevin Ennis, as well as the Audio Recorder library by Chris Wilson.
 
+####check it out at www.collaborave.com
+
 ##Recording
 Collaborave uses getUserMedia to obtain a stream from the user's audio hardware. I utilized the web worker from the AudioRecorder library to push the audio data into a float array for encoding once recording was finished. The app then uploads to an ftp server and saves the url in the main database for use later, while also rerendering the track with the new buffer and wavform.
 
