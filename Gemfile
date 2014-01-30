@@ -12,6 +12,7 @@ gem 'rails_12factor'
 gem 'carrierwave-ftp', :require => 'carrierwave/storage/ftp' # FTP only
 gem 'backbone-on-rails'
 gem 'ejs'
+gem 'newrelic_rpm'
 
 
 group :development, :test do
