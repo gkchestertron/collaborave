@@ -13,6 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery.serializeJSON.min
+//= require jszip.min
 //= require bootstrap
 //= require turbolinks
 
